@@ -1,0 +1,361 @@
+<!doctype html>
+<!--
+  Material Design Lite
+  Copyright 2015 Google Inc. All rights reserved.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License
+-->
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <link rel="icon" type="image/png" href="images/DB_16х16.png">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="A front-end template that helps you build fast, modern mobile web apps.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Material Dashboard Lite</title>
+
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Material Design Lite">
+
+
+    <!-- Tile icon for Win8 (144x144 + tile color) -->
+    <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
+    <meta name="msapplication-TileColor" content="#3372DF">
+
+    <!-- SEO: If your mobile URL is different from the desktop URL, add a canonical link to the desktop page https://developers.google.com/webmasters/smartphone-sites/feature-phones -->
+    <!--
+    <link rel="canonical" href="http://www.example.com/">
+    -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> 
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,500,300,100,700,900' rel='stylesheet'
+          type='text/css'>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- inject:css -->
+    <link rel="stylesheet" href="css/lib/getmdl-select.min.css">
+    <link rel="stylesheet" href="css/lib/nv.d3.min.css">
+    <link rel="stylesheet" href="css/application.min.css">
+    <!-- endinject -->
+
+</head>
+<body>
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header is-small-screen">
+    <header class="mdl-layout__header">
+        <div class="mdl-layout__header-row">
+            <div class="mdl-layout-spacer"></div>
+            
+
+            <div class="material-icons mdl-badge mdl-badge--overlap mdl-button--icon notification" id="notification"
+                 data-badge="1">
+                notifications_none
+            </div>
+            <!-- Notifications dropdown-->
+            <ul class="mdl-menu mdl-list mdl-js-menu mdl-js-ripple-effect mdl-menu--bottom-right mdl-shadow--2dp notifications-dropdown"
+                for="notification">
+                <li class="mdl-list__item">
+                    You have 1 new notifications!
+                </li>
+                
+                <li class="mdl-menu__item mdl-list__item list__item--border-top" data-toggle="modal" data-target="#exampleModalCenter">
+                    <span class="mdl-list__item-primary-content">
+                        <span class="mdl-list__item-avatar background-color--secondary">
+                            <i class="material-icons">error_outline</i>
+                        </span>
+                      <span>STNK Kendaraan 2</span>
+                    </span>
+                </li>
+                
+                <li class="mdl-list__item list__item--border-top">
+                    <button href="#" class="mdl-button mdl-js-button mdl-js-ripple-effect">ALL NOTIFICATIONS</button>
+                </li>
+            </ul>
+
+            
+
+            <div class="avatar-dropdown" id="icon">
+                <span>Admin</span>
+                <img src="images/Icon_header.png">
+            </div>
+            <!-- Account dropdawn-->
+            <ul class="mdl-menu mdl-list mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect mdl-shadow--2dp account-dropdown"
+                for="icon">
+                <li class="mdl-list__item mdl-list__item--two-line">
+                    <span class="mdl-list__item-primary-content">
+                        <span class="material-icons mdl-list__item-avatar"></span>
+                        <span>Luke</span>
+                        <span class="mdl-list__item-sub-title">Luke@skywalker.com</span>
+                    </span>
+                </li>
+                <li class="list__item--border-top"></li>
+                <li class="mdl-menu__item mdl-list__item">
+                    <span class="mdl-list__item-primary-content">
+                        <i class="material-icons mdl-list__item-icon">account_circle</i>
+                        My account
+                    </span>
+                </li>
+                <li class="mdl-menu__item mdl-list__item">
+                    <span class="mdl-list__item-primary-content">
+                        <i class="material-icons mdl-list__item-icon">perm_contact_calendar</i>
+                        My events
+                    </span>
+                </li>
+                <li class="list__item--border-top"></li>
+                <li class="mdl-menu__item mdl-list__item">
+                    <span class="mdl-list__item-primary-content">
+                        <i class="material-icons mdl-list__item-icon">settings</i>
+                        Settings
+                    </span>
+                </li>
+                <a href="login.html">
+                    <li class="mdl-menu__item mdl-list__item">
+                        <span class="mdl-list__item-primary-content">
+                            <i class="material-icons mdl-list__item-icon text-color--secondary">exit_to_app</i>
+                            Log out
+                        </span>
+                    </li>
+                </a>
+            </ul>
+
+            <button id="more"
+                    class="mdl-button mdl-js-button mdl-button--icon">
+                <i class="material-icons">more_vert</i>
+            </button>
+
+            <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect mdl-shadow--2dp settings-dropdown"
+                for="more">
+                <li class="mdl-menu__item">
+                    Settings
+                </li>
+                <a class="mdl-menu__item" href="https://github.com/CreativeIT/getmdl-dashboard/issues">
+                    Support
+                </a>
+                <li class="mdl-menu__item">
+                    F.A.Q.
+                </li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="mdl-layout__drawer">
+        <header>PTPN XXI</header>
+        <div class="scroll__wrapper" id="scroll__wrapper">
+            <div class="scroller" id="scroller">
+                <div class="scroll__container" id="scroll__container">
+                    <nav class="mdl-navigation">
+                        <a class="mdl-navigation__link " href="index.html">
+                            <i class="material-icons" role="presentation">dashboard</i>
+                            Dashboard
+                        </a>
+                        <a class="mdl-navigation__link mdl-navigation__link--current" href="data_dokumen.html">
+                            <i class="material-icons" role="presentation">dashboard</i>
+                            Data Dokumen
+                        </a>
+                        <div class="sub-navigation">
+                            <a class="mdl-navigation__link">
+                                <i class="material-icons">view_comfy</i>
+                                UI
+                                <i class="material-icons">keyboard_arrow_down</i>
+                            </a>
+                            <div class="mdl-navigation">
+                                <a class="mdl-navigation__link" href="ui-buttons.html">
+                                    Buttons
+                                </a>
+                                <a class="mdl-navigation__link" href="ui-cards.html">
+                                    Cards
+                                </a>
+                                <a class="mdl-navigation__link" href="ui-colors.html">
+                                    Colors
+                                </a>
+                                <a class="mdl-navigation__link" href="ui-form-components.html">
+                                    Forms
+                                </a>
+                                <a class="mdl-navigation__link" href="ui-icons.html">
+                                    Icons
+                                </a>
+                                <a class="mdl-navigation__link" href="ui-typography.html">
+                                    Typography
+                                </a>
+                                <a class="mdl-navigation__link" href="ui-tables.html">
+                                    Tables
+                                </a>
+                            </div>
+                        </div>
+                        <a class="mdl-navigation__link" href="ui-components.html">
+                            <i class="material-icons">developer_board</i>
+                            Components
+                        </a>
+                        <a class="mdl-navigation__link" href="forms.html">
+                            <i class="material-icons" role="presentation">person</i>
+                            Account
+                        </a>
+                        <a class="mdl-navigation__link" href="maps.html">
+                            <i class="material-icons" role="presentation">map</i>
+                            Maps
+                        </a>
+                        <a class="mdl-navigation__link" href="charts.html">
+                            <i class="material-icons">multiline_chart</i>
+                            Charts
+                        </a>
+                        <div class="sub-navigation">
+                            <a class="mdl-navigation__link">
+                                <i class="material-icons">pages</i>
+                                Pages
+                                <i class="material-icons">keyboard_arrow_down</i>
+                            </a>
+                            <div class="mdl-navigation">
+                                <a class="mdl-navigation__link" href="login.html">
+                                    Sign in
+                                </a>
+                                <a class="mdl-navigation__link" href="sign-up.html">
+                                    Sign up
+                                </a>
+                                <a class="mdl-navigation__link" href="forgot-password.html">
+                                    Forgot password
+                                </a>
+                                <a class="mdl-navigation__link" href="404.html">
+                                    404
+                                </a>
+                            </div>
+                        </div>
+                        <div class="mdl-layout-spacer"></div>
+                        <hr>
+                        <a class="mdl-navigation__link" href="https://github.com/CreativeIT/getmdl-dashboard">
+                            <i class="material-icons" role="presentation">link</i>
+                            GitHub
+                        </a>
+                    </nav>
+                </div>
+            </div>
+            <div class='scroller__bar' id="scroller__bar"></div>
+        </div>
+    </div>
+
+    <main class="mdl-layout__content">  
+        <div class="mdl-grid ui-tables">   
+            <div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--4-col-phone">
+                <div class="mdl-card mdl-shadow--2dp">
+                    <div class="mdl-card__title">
+                        <h1 class="mdl-card__title-text">Histori Status Dokumen</h1>
+                    </div>
+                    <div class="mdl-card__supporting-text no-padding">
+                        <table class="mdl-data-table mdl-js-data-table">
+                            <thead>
+                            <tr>
+                                <th class="mdl-data-table__cell--non-numeric">#</th>
+                                <th class="mdl-data-table__cell--non-numeric">Nama Dokumen</th>
+                                <th class="mdl-data-table__cell--non-numeric">Jenis Dokumen</th>
+                                <th class="mdl-data-table__cell--non-numeric">Bagian/Kebun</th>
+                                <th class="mdl-data-table__cell--non-numeric">PIC</th>
+                                <th class="mdl-data-table__cell--non-numeric">Masa Aktif</th>
+                                <th class="mdl-data-table__cell--non-numeric">Keterangan</th>
+                                <th class="mdl-data-table__cell--non-numeric">Akses</th>
+                                <th class="mdl-data-table__cell--non-numeric">Status</th>
+                                <th class="mdl-data-table__cell--non-numeric">Log</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="mdl-data-table__cell--non-numeric">5</td>
+                                    <td class="mdl-data-table__cell--non-numeric">STNK KENDARAAN 1</td>
+                                    <td class="mdl-data-table__cell--non-numeric">STNK KENDARAAN</td>
+                                    <td class="mdl-data-table__cell--non-numeric">Jatirono</td>
+                                    <td class="mdl-data-table__cell--non-numeric">KEBUN JATIRONO</td>
+                                    <td class="mdl-data-table__cell--non-numeric">1 tahun</td>
+                                    <td class="mdl-data-table__cell--non-numeric">Perpanjang STNK</td>
+                                    <td class="mdl-data-table__cell--non-numeric">Bagian Sekretaris Perusahaan</td>
+                                    <td class="mdl-data-table__cell--non-numeric">Diperbarui</td>
+                                    <td class="mdl-data-table__cell--non-numeric">2018-06-12 19:30</td>
+                                </tr>
+                                <tr>
+                                    <td class="mdl-data-table__cell--non-numeric">6</td>
+                                    <td class="mdl-data-table__cell--non-numeric">STNK KENDARAAN 2</td>
+                                    <td class="mdl-data-table__cell--non-numeric">STNK KENDARAAN</td>
+                                    <td class="mdl-data-table__cell--non-numeric">Jatirono</td>
+                                    <td class="mdl-data-table__cell--non-numeric">KEBUN JATIRONO</td>
+                                    <td class="mdl-data-table__cell--non-numeric">1 tahun</td>
+                                    <td class="mdl-data-table__cell--non-numeric">Perpanjang STNK</td>
+                                    <td class="mdl-data-table__cell--non-numeric">Bagian Sekretaris Perusahaan</td>
+                                    <td class="mdl-data-table__cell--non-numeric">Tidak DIperbarui</td>
+                                    <td class="mdl-data-table__cell--non-numeric">2018-06-12 19:30</td>
+                                </tr><tr>
+                                    <td class="mdl-data-table__cell--non-numeric">7</td>
+                                    <td class="mdl-data-table__cell--non-numeric">STNK KENDARAAN 3</td>
+                                    <td class="mdl-data-table__cell--non-numeric">STNK KENDARAAN</td>
+                                    <td class="mdl-data-table__cell--non-numeric">Jatirono</td>
+                                    <td class="mdl-data-table__cell--non-numeric">KEBUN JATIRONO</td>
+                                    <td class="mdl-data-table__cell--non-numeric">1 tahun</td>
+                                    <td class="mdl-data-table__cell--non-numeric">Perpanjang STNK</td>
+                                    <td class="mdl-data-table__cell--non-numeric">Bagian Sekretaris Perusahaan</td>
+                                    <td class="mdl-data-table__cell--non-numeric">Diperbarui</td>
+                                    <td class="mdl-data-table__cell--non-numeric">2018-06-12 19:30</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+            
+
+    </main>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalCenterTitle">Status Perpanjang </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+            Nama Dokumen
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Tidak Diperpanjang</button>
+            <button type="button" class="btn btn-primary">Diperpanjang</button>
+            </div>
+        </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- inject:js -->
+<script src="js/d3.min.js"></script>
+<script src="js/getmdl-select.min.js"></script>
+<script src="js/material.min.js"></script>
+<script src="js/nv.d3.min.js"></script>
+<script src="js/layout/layout.min.js"></script>
+<script src="js/scroll/scroll.min.js"></script>
+<script src="js/widgets/charts/discreteBarChart.min.js"></script>
+<script src="js/widgets/charts/linePlusBarChart.min.js"></script>
+<script src="js/widgets/charts/stackedBarChart.min.js"></script>
+<script src="js/widgets/employer-form/employer-form.min.js"></script>
+<script src="js/widgets/line-chart/line-charts-nvd3.min.js"></script>
+<script src="js/widgets/map/maps.min.js"></script>
+<script src="js/widgets/pie-chart/pie-charts-nvd3.min.js"></script>
+<script src="js/widgets/table/table.min.js"></script>
+<script src="js/widgets/todo/todo.min.js"></script>
+<!-- endinject -->
+
+</body>
+</html>

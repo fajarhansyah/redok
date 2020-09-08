@@ -1,0 +1,144 @@
+
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0 text-dark">Permintaan Download</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Permintaan Download</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <!-- Small boxes (Stat box) -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                      <table id="example2" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Tanggal Input</th>
+                                <th>Peminta</th>
+                                <th>Status</th>
+                                <th>Keperluan</th>
+                                <th>Tanggal Download</th>
+                                <th>Kode Unik</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>5</td>
+                                    <td>10-10-2020</td>
+                                    <td>Fajar</td>
+                                    <td>Request</td>
+                                    <td>Perpanjang STNK</td>
+                                    <td>05-07-2021</td>
+                                    <td><input  style="height:35px" type="text" value="FH3GKJT4" id="myInput" readonly></td>
+                                    <td>
+                                        <button type="button" class="btn btn-block btn-warning" data-toggle="modal" data-target="#detailmodal">Detail</button>
+                                        <button type="button" class="btn btn-block btn-primary" onclick="myFunction()">Salin</button>
+                                        <button type="button" class="btn btn-block btn-success mt-2">Kirim SMS</button>
+                                        <button type="button" class="btn btn-block btn-danger mt-2">Ditolak</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                  <td>6</td>
+                                  <td>10-10-2020</td>
+                                  <td>Fajar</td>
+                                  <td>Ditolak</td>
+                                  <td>Perpanjang STNK</td>
+                                  <td>-</td>
+                                  <td><input  style="height:35px" type="text" value="" id="myInput" readonly></td>
+                                  <td>
+                                      <button type="button" class="btn btn-block btn-warning" data-toggle="modal" data-target="#detailmodal">Detail</button>
+                                      <button type="button" class="btn btn-block btn-primary disabled" onclick="myFunction()" disabled>Salin</button>
+                                      <button type="button" class="btn btn-block btn-success mt-2">Kirim SMS</button>
+                                      <button type="button" class="btn btn-block btn-danger mt-2">Ditolak</button>
+                                  </td>
+                              </tr>
+                            </tbody>
+                        
+                      </table>
+                      
+                    </div>
+                    <!-- /.card-body -->
+                  </div>
+            </div>
+          <!-- ./col -->
+          
+          <!-- ./col -->
+        </div>
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Status Perpanjang </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                Nama Dokumen : <span style="color: red;">7 Hari Lagi</span> 
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tidak Diperpanjang</button>
+                <button onclick="window.location.href='edit-data_dokumen.html';" type="button" class="btn btn-primary">Memperbarui masa Aktif</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="detailmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Identitas Pengunduh </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                IP : <span style="color: red;">202.148.25.3</span> <br>
+                Hostname : <span style="color: red;">Release.dnetsurabaya.id</span> <br>
+                City : <span style="color: red;">Surabaya</span> <br>
+                Region : <span style="color: red;">East Java</span> <br>
+                Country : <span style="color: red;">ID</span> <br>
+                Loc : <span style="color: red;">-7.2474,436.5423</span> <br>
+                Timezone : <span style="color: red;">Asia/Jakarta</span><br> 
+                Browser : <span style="color: red;">Chrome</span> 
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+    function myFunction() {
+      var copyText = document.getElementById("myInput");
+      copyText.select();
+      copyText.setSelectionRange(0, 99999)
+      document.execCommand("copy");
+      alert("Code berhasil disalin");
+    }
+    
+</script>
