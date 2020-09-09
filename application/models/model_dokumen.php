@@ -9,9 +9,15 @@ class Model_dokumen extends CI_Model{
   public function tampil_data_bagian_kebun(){
     return $this->db->get('tb_master_bag_keb');
   }
+  public function tampil_data_user(){
+    return $this->db->get('tb_user');
+  }
   public function tambah_dokumen($data,$tables){
       $this->db->insert($tables,$data);
   }
+  public function tambah_histori_dokumen($data,$tables){
+    $this->db->insert($tables,$data);
+}
   public function edit_dokumen($where,$tables){
     return $this->db->get_where($tables,$where);
   }

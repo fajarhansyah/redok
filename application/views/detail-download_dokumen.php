@@ -6,7 +6,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Data Dokumen</h1>
+            <h1 class="m-0 text-dark">Detail Download Data Dokumen</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -28,58 +28,71 @@
                 <div class="card">
                     <!-- /.card-header -->
                     <div class="card-body">
-                      <div class="col-md-12 mb-3">
-                        <div class="row">
-                        
-                          <a href="<?php echo base_url() ?>c_data_dokumen/form_data_dokumen" class="col-md-3"><button type="button" class="btn btn-block btn-info btn-xs col-md-7">Tambah Dokumen</button></a>
-                          <div style="position: absolute;right: 0;"><a href="<?php echo base_url() ?>c_data_dokumen/permintaan_download"><button type="button" class="btn btn-block btn-info btn-xs">Permintaan Download <span class="badge bg-success">10</span></button></a></div>
-                        </div>
-                    </div>
                       <table id="example2" class="table table-bordered table-hover">
                         <thead>
                         <tr>
                             <th>#</th>
                             <th>Nama Dokumen</th>
-                            <th>Jenis Dokumen</th>
-                            <th>Bagian/Kebun</th>
-                            <th>PIC</th>
-                            <th>Masa Aktif</th>
-                            <th>Akses</th>
+                            <th>Tanggal</th>
+                            <th>Status</th>
+                            <th>Keterangan</th>
                             <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
-                        
-                        <?php
-                            $no=0;
-                            foreach ($data_dokumen as $dd) :
-                            $no++;
-                        ?>
+                            <?php
+                                $no=0;
+                                foreach ($detail_download_dokumen as $ddd) :
+                                $no++;
+                            ?>
                             <tr>
                                 <td><?php echo $no ?></td>
-                                <td><?php echo $dd['nama_dokumen'] ?></td>
-                                <td><?php echo $dd['nama_jenis_dokumen'] ?></td>
-                                <td><?php echo $dd['username'] ?></td>
-                                <td><?php echo $dd['pic'] ?></td>
-                                <td><?php echo $dd['masa_aktif'] ?></td>
+                                <td><?php echo $ddd['nama_dokumen'] ?></td>
+                                <td><?php echo $ddd['log'] ?></td>
+                                <td><?php echo $ddd['status'] ?></td>
+                                <td><?php echo $ddd['keterangan'] ?></td>
                                 <td>
-                                <?php foreach ($user as $usr) : ?>
-                                  <?php  $str = $dd['akses_for'];
-                                          if ($usr->id == $str) {
-                                            echo $usr->username;
-                                          }
-                                      ?> 
-                                      <?php endforeach; ?>
-                                </td>
-                                <td>
-                                  <?php echo anchor('c_data_dokumen/edit_data_dokumen/'.$dd['iddkm'], '<button type="button" class="btn btn-block btn-primary">Edit</button>') ?>
-                                  <?php echo anchor('c_data_dokumen/delete/'.$dd['iddkm'], '<button type="button" class="btn btn-block btn-danger mt-2">Hapus</button>') ?>
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" class="form-control" placeholder="Masukkan Kode Unik">
+                                        <span class="input-group-append">
+                                          <button type="button" class="btn btn-info btn-flat">Download</button>
+                                        </span>
+                                      </div>
                                 </td>
                             </tr>
                             <?php endforeach; ?>
+                            <!-- <tr>
+                                <td>5</td>
+                                <td>STNK KENDARAAN 1</td>
+                                <td>10-10-2020</td>
+                                <td>Request</td>
+                                <td>
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" class="form-control" placeholder="Masukkan Kode Unik">
+                                        <span class="input-group-append">
+                                          <button type="button" class="btn btn-info btn-flat">Download</button>
+                                        </span>
+                                      </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>STNK KENDARAAN 1</td>
+                                <td>10-10-2020</td>
+                                <td>Download</td>
+                                <td>
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" class="form-control" placeholder="Masukkan Kode Unik">
+                                        <span class="input-group-append">
+                                          <button type="button" class="btn btn-info btn-flat">Download</button>
+                                        </span>
+                                      </div>
+                                </td>
+                            </tr> -->
                         </tbody>
                         
                       </table>
+                      
                     </div>
                     <!-- /.card-body -->
                   </div>

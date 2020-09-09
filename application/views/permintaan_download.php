@@ -41,7 +41,29 @@
                             </tr>
                             </thead>
                             <tbody>
+                                <?php
+                                    $no=0;
+                                    foreach ($data_download_dokumen as $ddd) :
+                                    $no++;
+                                ?>
                                 <tr>
+                                    <td><?php echo $no ?></td>
+                                    <td><?php echo $ddd['log'] ?></td>
+                                    <td><?php echo $ddd['username'] ?></td>
+                                    <td><?php echo $ddd['status'] ?></td>
+                                    <td><?php echo $ddd['keterangan'] ?></td> 
+                                    <td><?php echo $ddd['tanggal_download'] ?></td> 
+                                    <td><input  style="height:35px" type="text" value="<?php echo $ddd['kode_unik'] ?>" id="myInput" readonly></td>
+                                    <td>
+                                        <button type="button" class="btn btn-block btn-warning" data-toggle="modal" data-target="#detailmodal">Detail</button>
+                                        <button type="button" class="btn btn-block btn-primary" onclick="myFunction()">Salin</button>
+                                        <button type="button" class="btn btn-block btn-success mt-2">Kirim SMS</button>
+                                        <button id="<?php echo $ddd['iddkm']?>"  onClick="reply_click(this.id,<?php echo $ddd['idhistori']?>)" type="button" class="btn btn-block btn-danger mt-2" data-toggle="modal" data-target="#exampleModalCenter">Ditolak</button>
+                                       
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                                <!-- <tr>
                                     <td>5</td>
                                     <td>10-10-2020</td>
                                     <td>Fajar</td>
@@ -55,8 +77,8 @@
                                         <button type="button" class="btn btn-block btn-success mt-2">Kirim SMS</button>
                                         <button type="button" class="btn btn-block btn-danger mt-2">Ditolak</button>
                                     </td>
-                                </tr>
-                                <tr>
+                                </tr> -->
+                                <!-- <tr>
                                   <td>6</td>
                                   <td>10-10-2020</td>
                                   <td>Fajar</td>
@@ -70,7 +92,7 @@
                                       <button type="button" class="btn btn-block btn-success mt-2">Kirim SMS</button>
                                       <button type="button" class="btn btn-block btn-danger mt-2">Ditolak</button>
                                   </td>
-                              </tr>
+                                </tr>  -->
                             </tbody>
                         
                       </table>
@@ -91,19 +113,23 @@
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
-                <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalCenterTitle">Status Perpanjang </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                </div>
-                <div class="modal-body">
-                Nama Dokumen : <span style="color: red;">7 Hari Lagi</span> 
-                </div>
-                <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tidak Diperpanjang</button>
-                <button onclick="window.location.href='edit-data_dokumen.html';" type="button" class="btn btn-primary">Memperbarui masa Aktif</button>
-                </div>
+              <form  action="<?php echo base_url(). 'c_data_dokumen/tolak_permintaan_download/' ?>" method="post">
+                  <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalCenterTitle">Tolak Permintaan Download </h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+                  </div>
+                  <div class="modal-body">
+                    <input type="hidden" id="myText" name="id" value="clicked_id">
+                    <input type="hidden" id="myTex1" name="idhistori" value="clicken_name">
+                  Yakin ta Pean
+                  </div>
+                  <div class="modal-footer">
+                  <button type="submit" class="btn btn-danger" >Tolak</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                  </div>
+              </form>
             </div>
         </div>
     </div>
@@ -141,4 +167,11 @@
       alert("Code berhasil disalin");
     }
     
+</script>
+<script type="text/javascript">
+  function reply_click(clicked_id,clicken_name)
+  {
+      document.getElementById("myText").value = clicked_id;
+      document.getElementById("myTex1").value = clicken_name;
+  }
 </script>

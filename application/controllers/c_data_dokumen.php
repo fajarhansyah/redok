@@ -4,26 +4,20 @@ class C_data_dokumen extends CI_Controller{
   {   $nama = $this->session->userdata('username');
       $query_dokumen = $this->db->query("SELECT *,tb_dokumen.id AS iddkm FROM tb_user 
       LEFT JOIN tb_dokumen ON tb_user.id = tb_dokumen.id_user
-      LEFT JOIN tb_master_bag_keb ON tb_dokumen.bag_or_keb = tb_master_bag_keb.id
       LEFT JOIN tb_master_jenis_dok ON tb_dokumen.jenis_dok = tb_master_jenis_dok.id
       WHERE tb_user.username = '$nama'");
       $data['data_dokumen'] = $query_dokumen->result_array();
+      $data['user'] = $this->model_dokumen->tampil_data_user()->result();
       $this->load->view('templates/header');
       $this->load->view('templates/sidebar');
       $this->load->view('data_dokumen',$data);
       $this->load->view('templates/footer');
   }
-  public function permintaan_download()
-  {   
-      $this->load->view('templates/header');
-      $this->load->view('templates/sidebar');
-      $this->load->view('permintaan_download');
-      $this->load->view('templates/footer');
-  }
+  
   public function form_data_dokumen()
   { 
     $data['jenis_dokumen'] = $this->model_dokumen->tampil_data_jenis_dokumen()->result();
-    $data['bagian_kebun'] = $this->model_dokumen->tampil_data_bagian_kebun()->result();
+    $data['user'] = $this->model_dokumen->tampil_data_user()->result();
     $this->load->view('tambah-data_dokumen',$data);
   }
   public function tambah_data_dokumen()
@@ -82,12 +76,11 @@ class C_data_dokumen extends CI_Controller{
     $where = array('id' =>$id);
     $data['data_dokumen'] = $this->model_dokumen->edit_dokumen($where,'tb_dokumen')->result();
     $data['jenis_dokumen'] = $this->model_dokumen->tampil_data_jenis_dokumen()->result();
-    $data['bagian_kebun'] = $this->model_dokumen->tampil_data_bagian_kebun()->result();
+    $data['user'] = $this->model_dokumen->tampil_data_user()->result();
     $nama = $this->session->userdata('username');
     $query_dokumen = $this->db->query("SELECT * FROM tb_user 
     LEFT JOIN tb_dokumen ON tb_user.id = tb_dokumen.id_user
     LEFT JOIN histori_pembarui_dokumen ON tb_dokumen.id = histori_pembarui_dokumen.id_dokumen
-    LEFT JOIN tb_master_bag_keb ON tb_dokumen.bag_or_keb = tb_master_bag_keb.id
     LEFT JOIN tb_master_jenis_dok ON tb_dokumen.jenis_dok = tb_master_jenis_dok.id
     WHERE tb_user.username = '$nama' && histori_pembarui_dokumen.id_dokumen = '$id'");
     $data['histori_data_dokumen'] = $query_dokumen->result_array(); 
@@ -133,7 +126,39 @@ class C_data_dokumen extends CI_Controller{
 	{
 	$this->db->query("DELETE FROM `reminder_dok`.`tb_dokumen` WHERE `tb_dokumen`.`id` = '$id'");
 	redirect('c_data_dokumen/index');
-	}
+  }
+  public function permintaan_download()
+  {   
+      $id_pem_dokumen = $this->session->userdata('id');
+      $query_download_dokumen = $this->db->query("SELECT *,tb_dokumen.id AS iddkm,histori_download_dokumen.id AS idhistori FROM tb_dokumen 
+      LEFT JOIN tb_master_jenis_dok ON tb_dokumen.jenis_dok = tb_master_jenis_dok.id
+      LEFT JOIN histori_download_dokumen ON tb_dokumen.id = histori_download_dokumen.id_dokumen
+      LEFT JOIN tb_user ON tb_dokumen.akses_for = tb_user.id
+      WHERE tb_dokumen.id_user = '$id_pem_dokumen' && histori_download_dokumen.status != ''");
+      $data['data_download_dokumen'] = $query_download_dokumen->result_array(); 
+      $this->load->view('templates/header');
+      $this->load->view('templates/sidebar');
+      $this->load->view('permintaan_download',$data);
+      $this->load->view('templates/footer');
+  }
+  public function tolak_permintaan_download()
+  {   
+    $iddokumen            = $this->input->post('id');
+    $idhistori            = $this->input->post('idhistori');
+    $kode_generate  = '-';
+    $status         = 'Ditolak';
+    $data = array(
+      'kode_unik' => $kode_generate
+    );
+    $data1 = array(
+      'status'    => $status
+    );
+    $where = array('id' => $iddokumen);
+    $where1 = array('id' => $idhistori);
+    $this->model_dokumen->update_dokumen($where,$data,'tb_dokumen');
+    $this->model_dokumen->update_dokumen($where1,$data1,'histori_download_dokumen');
+    redirect('c_data_dokumen/permintaan_download');
+  }
   
 
 }

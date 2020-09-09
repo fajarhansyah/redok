@@ -28,7 +28,7 @@
                     <!-- /.card-header -->
                     <div class="card-body">
                         <div class="col-md-3 mb-3">
-                            <a href="detail-download_dokumen.html"><button type="button" class="btn btn-block btn-info btn-xs">Request Download Dokumen</button></a>
+                            <a href="<?php echo base_url();?>c_download_dokumen/detail_download_dokumen"><button type="button" class="btn btn-block btn-info btn-xs">Request Download Dokumen</button></a>
                         </div>
                         
                       <table id="example2" class="table table-bordered table-hover">
@@ -40,25 +40,27 @@
                             <th>Bagian/Kebun</th>
                             <th>PIC</th>
                             <th>Masa Aktif</th>
-                            <th>Keterangan</th>
                             <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
+                            <?php
+                                $no=0;
+                                foreach ($data_download_dokumen as $ddd) :
+                                $no++;
+                            ?>
                             <tr>
-                                <td>5</td>
-                                <td>STNK KENDARAAN 1</td>
-                                <td>STNK KENDARAAN</td>
-                                <td>Jatirono</td>
-                                <td>KEBUN JATIRONO</td>
-                                <td>05-07-2021</td>
-                                <td>Perpanjang STNK</td>
+                                <td><?php echo $no ?></td>
+                                <td><?php echo $ddd['nama_dokumen'] ?></td>
+                                <td><?php echo $ddd['nama_jenis_dokumen'] ?></td>
+                                <td><?php echo $ddd['username'] ?></td>
+                                <td><?php echo $ddd['pic'] ?></td>
+                                <td><?php echo $ddd['masa_aktif'] ?></td>
                                 <td>
-                                    <a href="edit-data_dokumen.html"><button type="button" class="btn btn-block btn-primary">Edit</button></a>
-                                    <button type="button" class="btn btn-block btn-danger mt-2">Hapus</button>
-                                    <button type="button" class="btn btn-block bg-gradient-success" data-toggle="modal" data-target="#exampleModal">Download</button>
+                                <button type="button" id="<?php echo $ddd['iddkm']?>" onClick="reply_click(this.id)" class="btn btn-block bg-gradient-success" data-toggle="modal" data-target="#exampleModal">Download</button>
                                 </td>
                             </tr>
+                            <?php endforeach; ?>
                         </tbody>
                         
                       </table>
@@ -75,25 +77,6 @@
     </section>
     <!-- /.content -->
   </div>
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalCenterTitle">Status Perpanjang </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                </div>
-                <div class="modal-body">
-                Nama Dokumen : <span style="color: red;">7 Hari Lagi</span> 
-                </div>
-                <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tidak Diperpanjang</button>
-                <button onclick="window.location.href='edit-data_dokumen.html';" type="button" class="btn btn-primary">Memperbarui masa Aktif</button>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
@@ -104,12 +87,13 @@
               </button>
             </div>
             <div class="modal-body">
-              <form>
+              <form action="<?php echo base_url(). 'c_download_dokumen/generatekodeunik' ?>" method="post">
                 <div class="form-group">
+                    <input type="hidden" id="myText" name="id" value="clicked_id">
                     <label for="message-text" class="col-form-label">Keperluan:</label>
-                    <textarea class="form-control" id="message-text"></textarea>
+                    <textarea class="form-control" id="message-text" name="keterangan" ></textarea>
                   </div>
-                <button type="button" class="btn btn-primary">Dapatkan Kode Unik</button>
+                  <button type="submit" class="btn btn-primary">Dapatkan Kode Unik</button>
               </form>
             </div>
             <div class="modal-footer">
@@ -118,3 +102,9 @@
           </div>
         </div>
     </div>
+<script type="text/javascript">
+  function reply_click(clicked_id)
+  {
+      document.getElementById("myText").value = clicked_id;
+  }
+</script>

@@ -128,14 +128,14 @@
                         <div class="form-group">
                             <label>Bagian/Kebun</label>
                             <select class="form-control select2" style="width: 100%;" name="bag_or_keb">
-                              <?php foreach ($bagian_kebun as $bk) : ?>
+                              <?php foreach ($user as $bk) : ?>
                                 <option value="<?php echo $bk->id;?>" 
                                         <?php 
                                             if ($bk->id == $dd->bag_or_keb) {
                                               echo "selected";
                                             }
                                         ?>>
-                                        <?php echo $bk->nama?></option>
+                                        <?php echo $bk->username?></option>
                               <?php endforeach; ?>
                             </select>
                         </div>
@@ -158,16 +158,16 @@
                         <div class="form-group">
                             <label>Memberikan Akses ke</label>
                             <select class="select2bs4" multiple="multiple" style="width: 100%;" name="akses_for[]" data-live-search="true" multiple required>
-                            <?php foreach ($bagian_kebun as $bk) : ?>
-                                    <option value="<?php echo $bk->id;?>" 
+                            <?php foreach ($user as $usr) : ?>
+                                    <option value="<?php echo $usr->id;?>" 
                                       <?php 
                                           $str = $dd->akses_for;
                                           $akses = explode(",",$str);
-                                          if (in_array($bk->id, $akses)) {
+                                          if (in_array($usr->id, $akses)) {
                                             echo "selected";
                                           }
                                       ?> >
-                                      <?php echo $bk->nama?>
+                                      <?php echo $usr->username?>
                                     </option>
                                 <?php endforeach; ?>
                             </select>

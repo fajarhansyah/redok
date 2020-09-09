@@ -113,14 +113,23 @@
                                 <div class="col-12">
                                     <label for="exampleInputEmail1">Durasi</label>
                                 </div>
-                                <div class="col-2">
+                                <div class="input-group mb-3 col-2">
                                   <input type="number" class="form-control" onKeyPress="if(this.value.length==2) return false;" placeholder="Tahun" name="durasi_tahun" value="<?php echo $jd->durasi_tahun ?>">
+                                  <div class="input-group-append">
+                                    <span class="input-group-text">Tahun</span>
+                                  </div>  
                                 </div>
-                                <div class="col-2">
+                                <div class="col-2 input-group mb-3">
                                   <input type="number" class="form-control" onKeyPress="if(this.value.length==2) return false;" placeholder="Bulan" name="durasi_bulan" value="<?php echo $jd->durasi_bulan ?>">
+                                  <div class="input-group-append">
+                                    <span class="input-group-text">Bulan</span>
+                                  </div> 
                                 </div>
-                                <div class="col-2">
+                                <div class="col-2 input-group mb-3">
                                   <input type="number" class="form-control" onKeyPress="if(this.value.length==2) return false;" placeholder="Hari" name="durasi_tgl" value="<?php echo $jd->durasi_tgl ?>">
+                                  <div class="input-group-append">
+                                    <span class="input-group-text">Hari</span>
+                                  </div> 
                                 </div>
                               </div>
                         </div>

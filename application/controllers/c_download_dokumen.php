@@ -1,12 +1,54 @@
 <?php
 class C_download_dokumen extends CI_Controller{
   public function index()
-  {
+  {   
+      $id_pengakses = $this->session->userdata('id');
+      $query_download_dokumen = $this->db->query("SELECT *,tb_dokumen.id AS iddkm FROM tb_dokumen 
+      LEFT JOIN tb_user ON tb_dokumen.id_user = tb_user.id
+      LEFT JOIN tb_master_jenis_dok ON tb_dokumen.jenis_dok = tb_master_jenis_dok.id
+      WHERE tb_dokumen.akses_for = '$id_pengakses'");
+      $data['data_download_dokumen'] = $query_download_dokumen->result_array();
       $this->load->view('templates/header');
       $this->load->view('templates/sidebar');
-      $this->load->view('download_dokumen');
+      $this->load->view('download_dokumen',$data);
       $this->load->view('templates/footer');
+  }
+  public function generatekodeunik()
+  {
+    $this->load->helper('string');
+    $id       = $this->input->post('id');
+    $keterangan       = $this->input->post('keterangan');
+    $kode_generate = random_string('alnum', 12);
+    $status = "Request";
     
+    
+    $data = array(
+      'kode_unik' => $kode_generate
+    );
+    $data1 = array(
+      'id_dokumen'    => $id,
+      'keterangan'=> $keterangan,
+      'status'    => $status
+      
+    );
+    $where = array('id' => $id);
+    $this->model_dokumen->update_dokumen($where,$data,'tb_dokumen');
+
+    $this->model_dokumen->tambah_dokumen($data1, 'histori_download_dokumen');
+    redirect('c_download_dokumen/index/');
+  }
+  public function detail_download_dokumen()
+    {
+      $id_pengakses = $this->session->userdata('id');
+      $query_download_dokumen = $this->db->query("SELECT *,tb_dokumen.id AS iddkm FROM tb_dokumen 
+      LEFT JOIN tb_master_jenis_dok ON tb_dokumen.jenis_dok = tb_master_jenis_dok.id
+      LEFT JOIN histori_download_dokumen ON tb_dokumen.id = histori_download_dokumen.id_dokumen
+      WHERE tb_dokumen.akses_for = '$id_pengakses' && histori_download_dokumen.status != ''");
+      $data['detail_download_dokumen'] = $query_download_dokumen->result_array();
+      $this->load->view('templates/header');
+      $this->load->view('templates/sidebar');
+      $this->load->view('detail-download_dokumen',$data);
+      $this->load->view('templates/footer');
   }
 
 }

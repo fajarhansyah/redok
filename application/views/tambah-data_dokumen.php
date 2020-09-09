@@ -142,8 +142,8 @@
                         <div class="form-group">
                             <label>Memberikan Akses ke</label>
                             <select class="select2bs4" multiple="multiple" data-placeholder="" style="width: 100%;" name="akses_for[]">
-                                <?php foreach ($bagian_kebun as $bk) : ?>
-                                    <option><?php echo $bk->nama?></option>
+                                <?php foreach ($user as $usr) : ?>
+                                    <option><?php echo $usr->username?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
