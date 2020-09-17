@@ -118,11 +118,7 @@
                 </button>
                 </div>
                 <div class="modal-body">
-                <?php
-                foreach ($notifikasi_reminder as $ddd) :
-                ?>
-                <?php echo $ddd['nama_dokumen']?> : <span style="color: red;">7 Hari Lagi</span> 
-                <?php endforeach; ?> 
+                Nama Dokumen : <span style="color: red;">7 Hari Lagi</span> 
                 </div>
                 <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Tidak Diperpanjang</button>

@@ -55,12 +55,11 @@
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
           <span class="dropdown-item dropdown-header">1 Notifications</span>
           <div class="dropdown-divider"></div>
-          <?php
-                foreach ($notifikasi_reminder as $ddd) :
-              ?>
           <a href="#" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">
             <i class="fas fa-exclamation-circle"></i> 
-              
+              <?php
+                foreach ($notifikasi_reminder as $ddd) :
+              ?>
                 <?php echo $ddd['nama_dokumen']?>
                <br> habis masa aktif pada : 
                 <?php 
@@ -69,9 +68,8 @@
                 echo $tanggal[1];
                 ?>
 
-               
+               <?php endforeach; ?> 
           </a>
-          <?php endforeach; ?> 
           <div class="dropdown-divider"></div>
           <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
         </div>
