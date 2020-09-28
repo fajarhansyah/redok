@@ -1,9 +1,18 @@
 <?php
 class C_download_dokumen extends CI_Controller{
-  
-  function __construct(){
-		parent::__construct();
-		$this->load->helper(array('url','download'));				
+  public function __construct(){
+    parent::__construct();
+    if($this->session->userdata('role_id') == ''){
+      $this->session->set_flashdata('pesan','<div class="alert alert-danger alert-dismissible fade show" role="alert">
+          Anda Belum Login
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>');
+        redirect('auth/login');
+        parent::__construct();
+		  $this->load->helper(array('url','download'));	
+    }
   }
   
   public function index()
@@ -13,8 +22,16 @@ class C_download_dokumen extends CI_Controller{
       LEFT JOIN tb_user ON tb_dokumen.id_user = tb_user.id
       LEFT JOIN tb_master_jenis_dok ON tb_dokumen.jenis_dok = tb_master_jenis_dok.id
       WHERE tb_dokumen.akses_for LIKE '%$id_pengakses%'");
+      $query_notifikasi = $this->db->query("SELECT *,tb_dokumen.id AS iddkm FROM tb_dokumen 
+      LEFT JOIN tb_user ON tb_dokumen.id_user = tb_user.id
+      WHERE tb_dokumen.id_user = '$id_pengakses' && pengingat = '1'");
+      $jumlah_query_notifikasi = $this->db->query("SELECT *,COUNT(tb_dokumen.id) AS jn FROM tb_dokumen 
+      LEFT JOIN tb_user ON tb_dokumen.id_user = tb_user.id
+      WHERE tb_dokumen.id_user = '$id_pengakses' && pengingat = '1'");
+      $data['notifikasi_reminder'] = $query_notifikasi->result_array();
+      $data['jumlah_notifikasi_reminder'] = $jumlah_query_notifikasi->result_array();
       $data['data_download_dokumen'] = $query_download_dokumen->result_array();
-      $this->load->view('templates/header');
+      $this->load->view('templates/header',$data);
       $this->load->view('templates/sidebar');
       $this->load->view('download_dokumen',$data);
       $this->load->view('templates/footer');
@@ -23,50 +40,68 @@ class C_download_dokumen extends CI_Controller{
   {
     $this->load->helper('string');
     $id       = $this->input->post('id');
+    $nama_peminta = $this->session->userdata('username');
     $keterangan       = $this->input->post('keterangan');
     $kode_generate = random_string('alnum', 12);
     $status = "Request";
     
     
-    $data = array(
-      'kode_unik' => $kode_generate
-    );
     $data1 = array(
       'id_dokumen'    => $id,
       'keterangan'=> $keterangan,
-      'status'    => $status
+      'status'    => $status,
+      'kode_unik' => $kode_generate,
+      'peminta' => $nama_peminta
+      
       
     );
-    $where = array('id' => $id);
-    $this->model_dokumen->update_dokumen($where,$data,'tb_dokumen');
 
     $this->model_dokumen->tambah_dokumen($data1, 'histori_download_dokumen');
-    redirect('c_download_dokumen/index/');
+    redirect('c_data_dokumen/index/');
   }
   public function detail_download_dokumen()
-    {
+  {
       $id_pengakses = $this->session->userdata('id');
       $query_download_dokumen = $this->db->query("SELECT *,tb_dokumen.id AS iddkm FROM tb_dokumen 
       LEFT JOIN tb_master_jenis_dok ON tb_dokumen.jenis_dok = tb_master_jenis_dok.id
       LEFT JOIN histori_download_dokumen ON tb_dokumen.id = histori_download_dokumen.id_dokumen
-      WHERE tb_dokumen.akses_for = '$id_pengakses' && histori_download_dokumen.status != ''");
+      WHERE tb_dokumen.akses_for LIKE '%$id_pengakses%' && histori_download_dokumen.status != ''");
+      $query_notifikasi = $this->db->query("SELECT *,tb_dokumen.id AS iddkm FROM tb_dokumen 
+      LEFT JOIN tb_user ON tb_dokumen.id_user = tb_user.id
+      WHERE tb_dokumen.id_user = '$id_pengakses' && pengingat = '1'");
+      $jumlah_query_notifikasi = $this->db->query("SELECT *,COUNT(tb_dokumen.id) AS jn FROM tb_dokumen 
+      LEFT JOIN tb_user ON tb_dokumen.id_user = tb_user.id
+      WHERE tb_dokumen.id_user = '$id_pengakses' && pengingat = '1'");
+      $data['notifikasi_reminder'] = $query_notifikasi->result_array();
+      $data['jumlah_notifikasi_reminder'] = $jumlah_query_notifikasi->result_array();
       $data['detail_download_dokumen'] = $query_download_dokumen->result_array();
-      $this->load->view('templates/header');
+      $this->load->view('templates/header',$data);
       $this->load->view('templates/sidebar');
       $this->load->view('detail-download_dokumen',$data);
       $this->load->view('templates/footer');
   }
-  public function lakukan_download($data_dokumen){
+  public function lakukan_download($data_dokumen)
+  {
     $datadok = $data_dokumen;
     $kode_unik = $this->input->post('kode_unik');
     $getkode_unik = $this->input->post('getkode_unik');
+    $idhistori = $this->input->post('idhistori');
+    $tanggal_download = date("m/d/Y");
     if($kode_unik == $getkode_unik ){
-      force_download('uploads/'.$datadok,NULL);
+      
+      $data1 = array(
+        'tanggal_download'    => $tanggal_download,
+        'status'    => 'Berhasil'
+      );
+    $where1 = array('id' => $idhistori);
+    $this->model_dokumen->update_dokumen($where1,$data1,'histori_download_dokumen');
+    force_download('uploads/'.$datadok,NULL);
     }else if ($getkode_unik = ''){
       echo '<script>alert("Kode Salah");</script>';
     }else{
       echo '<script>alert("Kode Salah");</script>';
     }
+
 	}
 
 }

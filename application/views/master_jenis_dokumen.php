@@ -54,8 +54,8 @@
                                   <?php echo $jendok['durasi_tgl'] ?> Hari
                                 </td>
                               <td>
-                              <?php echo anchor('c_master_jenis_dokumen/edit_jenis_dokumen/'.$jendok['id'], '<button type="button" class="btn btn-block btn-primary">Edit</button>') ?>
-                                <?php echo anchor('c_master_jenis_dokumen/delete/'.$jendok['id'], '<button type="button" class="btn btn-block btn-danger mt-2">Hapus</button>') ?>
+                              <?php echo anchor('c_master_jenis_dokumen/edit_jenis_dokumen/'.$jendok['id'], '<button type="button" class="btn  btn-primary btn-sm"><i class="far fa-edit"></i></button>') ?>
+                                <?php echo anchor('c_master_jenis_dokumen/delete/'.$jendok['id'], '<button type="button" class="btn  btn-danger btn-sm "><i class="fas fa-trash"></i></button>') ?>
                               </td>
                             </tr>
                             <?php endforeach; ?>

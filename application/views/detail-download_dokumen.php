@@ -48,13 +48,14 @@
                             <tr>
                                 <td><?php echo $no ?></td>
                                 <td><?php echo $ddd['nama_dokumen'] ?></td>
-                                <td><?php echo $ddd['log'] ?></td>
+                                <td><?php echo date('d-m-Y', strtotime($ddd['log']));?></td>
                                 <td><?php echo $ddd['status'] ?></td>
                                 <td><?php echo $ddd['keterangan'] ?></td>
                                 <td>
                                     <form action="<?php echo base_url(). 'c_download_dokumen/lakukan_download/'.$ddd['upload_dokumen'] ?>" method="post">
                                       <div class="input-group input-group-sm">
                                         <input type="hidden" class="form-control"  name="getkode_unik" value="<?php echo $ddd['kode_unik']?>">
+                                        <input type="hidden" class="form-control"  name="idhistori" value="<?php echo $ddd['id']?>">
                                         <input type="text" class="form-control" placeholder="Masukkan Kode Unik" name="kode_unik">
                                         <span class="input-group-append">
                                         <button type="submit" class="btn btn-info btn-flat" >Download</button>

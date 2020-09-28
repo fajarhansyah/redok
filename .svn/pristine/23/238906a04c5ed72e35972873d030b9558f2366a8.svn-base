@@ -1,0 +1,245 @@
+<?php
+class C_data_dokumen extends CI_Controller{
+  public function index()
+  {   
+      $id = $this->session->userdata('id');
+      $nama = $this->session->userdata('username');
+      $query_dokumen = $this->db->query("SELECT *,tb_dokumen.id AS iddkm FROM tb_dokumen 
+      LEFT JOIN tb_user ON tb_dokumen.id_user = tb_user.id
+      LEFT JOIN tb_master_jenis_dok ON tb_dokumen.jenis_dok = tb_master_jenis_dok.id
+      WHERE tb_user.username = '$nama'");
+      $query_permintaan_download = $this->db->query("SELECT *,tb_dokumen.id AS iddkm,histori_download_dokumen.id AS idhistori,COUNT(tb_dokumen.id) AS jn FROM tb_dokumen 
+      LEFT JOIN tb_master_jenis_dok ON tb_dokumen.jenis_dok = tb_master_jenis_dok.id
+      LEFT JOIN histori_download_dokumen ON tb_dokumen.id = histori_download_dokumen.id_dokumen
+      LEFT JOIN tb_user ON tb_dokumen.akses_for = tb_user.id
+      WHERE tb_dokumen.id_user = '$id' && histori_download_dokumen.status != ''");
+      $query_notifikasi = $this->db->query("SELECT *,tb_dokumen.id AS iddkm FROM tb_dokumen 
+      LEFT JOIN tb_user ON tb_dokumen.id_user = tb_user.id
+      WHERE tb_dokumen.id_user = '$id' && pengingat = '1'");
+      $jumlah_query_notifikasi = $this->db->query("SELECT *,COUNT(tb_dokumen.id) AS jn FROM tb_dokumen 
+      LEFT JOIN tb_user ON tb_dokumen.id_user = tb_user.id
+      WHERE tb_dokumen.id_user = '$id' && pengingat = '1'");
+      $data['notifikasi_reminder'] = $query_notifikasi->result_array();
+      $data['jumlah_notifikasi_reminder'] = $jumlah_query_notifikasi->result_array();
+      $data['data_dokumen'] = $query_dokumen->result_array();
+      $data['jumlahnotifikasi'] = $query_permintaan_download->result_array();
+      $data['user'] = $this->model_dokumen->tampil_data_user()->result();
+      $query_notif = $this->db->query("SELECT *,tb_dokumen.id AS iddkm FROM tb_dokumen 
+      LEFT JOIN tb_user ON tb_dokumen.id_user = tb_user.id
+      LEFT JOIN tb_master_jenis_dok ON tb_dokumen.jenis_dok = tb_master_jenis_dok.id");
+      $data1['query_notif'] = $query_notif->result_array();
+          foreach($data1['query_notif'] as $row){
+            $str = $row['masa_aktif'];
+            $id_dkm = $row['iddkm'];
+            $tanggal = explode("-",$str);
+            $format_tgl = str_replace("/","-",$tanggal[1],$i);
+            $hari = $row['durasi_tgl'];
+            $bulan = $row['durasi_bulan'];
+            $tahun = $row['durasi_tahun'];
+            $tgl1    = $format_tgl; 
+            $tgl2    = date('d-m-Y', strtotime('-'.$hari.'days', strtotime($tgl1)));
+            $tgl3    = date('d-m-Y', strtotime('-'.$bulan.'month', strtotime($tgl2)));
+            $tgl4    = date('d-m-Y', strtotime('-'.$tahun.'year', strtotime($tgl3)));
+            $akhir1 = date("d-m-Y");
+              if($tgl4 == $akhir1){
+                $pengingat  = '1';
+                $data3 = array(
+                  'pengingat' => $pengingat
+                );
+                $where = array('id' => $id_dkm);
+                $this->model_dokumen->update_dokumen($where,$data3,'tb_dokumen');  
+              }
+          }
+      
+      
+      $this->load->view('templates/header',$data);
+      $this->load->view('templates/sidebar');
+      $this->load->view('data_dokumen',$data);
+      $this->load->view('templates/footer');
+  }
+  
+  public function form_data_dokumen()
+  { 
+    $data['jenis_dokumen'] = $this->model_dokumen->tampil_data_jenis_dokumen()->result();
+    $data['user'] = $this->model_dokumen->tampil_data_user()->result();
+    $this->load->view('tambah-data_dokumen',$data);
+  }
+  public function tambah_data_dokumen()
+  {
+    $id = $this->session->userdata('id');
+    $nama_dokumen = $this->input->post('nama_dokumen');
+    $bag_or_keb = $this->input->post('bag_or_keb');
+    $jenis_dok = $this->input->post('jenis_dok');
+    $masa_aktif = $this->input->post('masa_aktif');
+    $pic = $this->input->post('pic');
+    $akses_for = $_POST['akses_for'];
+    
+    $upload_dokumen = $_FILES['upload_dokumen']['name'];
+    if($upload_dokumen =''){}else{
+      $config['upload_path'] = './uploads';
+      $config['allowed_types'] = '*';
+
+      $this->load->library('upload', $config);
+      if (!$this->upload->do_upload('upload_dokumen')) {
+        echo "Gambar Gagal Upload !";
+      }else {
+        $upload_dokumen=$this->upload->data('file_name');
+      }
+    }
+    $data1 = array(
+      'id_user' => $id,
+      'nama_dokumen' => $nama_dokumen,
+      'bag_or_keb' => $bag_or_keb,
+      'jenis_dok' => $jenis_dok,
+      'masa_aktif' => $masa_aktif,
+      'pic' => $pic,
+      'akses_for' => implode(",",$akses_for),
+      'upload_dokumen' => $upload_dokumen
+    );
+    $this->model_dokumen->tambah_dokumen($data1, 'tb_dokumen');
+    redirect('c_data_dokumen/index');
+  }
+  public function tambah_histori_data_dokumen()
+  {
+    $id_dokumen = $this->input->post('id_dokumen');
+    $pembaruan_tanggal = $this->input->post('pembaruan_tanggal');
+    $data1 = array(
+      'id_dokumen' => $id_dokumen
+    );
+    $data2 = array(
+      'masa_aktif' => $pembaruan_tanggal
+    );
+    $where = array('id' => $id_dokumen);
+    $this->model_dokumen->tambah_dokumen($data1, 'histori_pembarui_dokumen');
+    $this->model_dokumen->update_dokumen($where,$data2,'tb_dokumen');
+
+    redirect('c_data_dokumen/edit_data_dokumen/'.$id_dokumen);
+  }
+  public function edit_data_dokumen($id)
+  {
+    $where = array('id' =>$id);
+    $data['data_dokumen'] = $this->model_dokumen->edit_dokumen($where,'tb_dokumen')->result();
+    $data['jenis_dokumen'] = $this->model_dokumen->tampil_data_jenis_dokumen()->result();
+    $data['user'] = $this->model_dokumen->tampil_data_user()->result();
+    $nama = $this->session->userdata('username');
+    $query_dokumen = $this->db->query("SELECT * FROM tb_user 
+    LEFT JOIN tb_dokumen ON tb_user.id = tb_dokumen.id_user
+    LEFT JOIN histori_pembarui_dokumen ON tb_dokumen.id = histori_pembarui_dokumen.id_dokumen
+    LEFT JOIN tb_master_jenis_dok ON tb_dokumen.jenis_dok = tb_master_jenis_dok.id
+    WHERE tb_user.username = '$nama' && histori_pembarui_dokumen.id_dokumen = '$id'");
+    $data['histori_data_dokumen'] = $query_dokumen->result_array(); 
+    $this->load->view('edit-data_dokumen',$data);
+  }
+  public function update_data_dokumen()
+  {
+    $id       = $this->input->post('id');
+    $nama_dokumen = $this->input->post('nama_dokumen');
+    $bag_or_keb = $this->input->post('bag_or_keb');
+    $jenis_dok = $this->input->post('jenis_dok');
+    $masa_aktif = $this->input->post('masa_aktif');
+    $pic = $this->input->post('pic');
+    $akses_for = $_POST['akses_for'];
+    $upload_dokumen = $_FILES['upload_dokumen']['name'];
+    if($upload_dokumen =''){
+    }else{
+      $config['upload_path'] = './uploads';
+      $config['allowed_types'] = '*';
+
+      $this->load->library('upload', $config);
+      if (!$this->upload->do_upload('upload_dokumen')) {
+        echo "Gambar Gagal Upload !";
+      }else {
+        $upload_dokumen=$this->upload->data('file_name');
+      }
+    }
+    
+    $data = array(
+      'nama_dokumen' => $nama_dokumen,
+      'bag_or_keb' => $bag_or_keb,
+      'jenis_dok' => $jenis_dok,
+      'masa_aktif' => $masa_aktif,
+      'pic' => $pic,
+      'akses_for' => implode(",",$akses_for),
+      'upload_dokumen' => $upload_dokumen
+    );
+    $where = array('id' => $id);
+    $this->model_dokumen->update_dokumen($where,$data,'tb_dokumen');
+    redirect('c_data_dokumen/edit_data_dokumen/'.$id);
+  }
+  public function delete($id)
+	{
+	$this->db->query("DELETE FROM `reminder_dok`.`tb_dokumen` WHERE `tb_dokumen`.`id` = '$id'");
+	redirect('c_data_dokumen/index');
+  }
+  public function permintaan_download()
+  {
+      $id_pem_dokumen = $this->session->userdata('id');
+      $query_download_dokumen = $this->db->query("SELECT *,tb_dokumen.id AS iddkm,histori_download_dokumen.id AS idhistori FROM tb_dokumen 
+      LEFT JOIN tb_master_jenis_dok ON tb_dokumen.jenis_dok = tb_master_jenis_dok.id
+      LEFT JOIN histori_download_dokumen ON tb_dokumen.id = histori_download_dokumen.id_dokumen
+      LEFT JOIN tb_user ON tb_dokumen.akses_for = tb_user.id
+      WHERE tb_dokumen.id_user = '$id_pem_dokumen' && histori_download_dokumen.status != ''");
+      $data['data_download_dokumen'] = $query_download_dokumen->result_array(); 
+      $this->load->view('templates/header');
+      $this->load->view('templates/sidebar');
+      $this->load->view('permintaan_download',$data);
+      $this->load->view('templates/footer');
+  }
+  public function tolak_permintaan_download()
+  {   
+    $iddokumen            = $this->input->post('id');
+    $idhistori            = $this->input->post('idhistori');
+    $kode_generate  = '-';
+    $status         = 'Ditolak';
+    $data = array(
+      'kode_unik' => $kode_generate
+    );
+    $data1 = array(
+      'status'    => $status
+    );
+    $where = array('id' => $iddokumen);
+    $where1 = array('id' => $idhistori);
+    $this->model_dokumen->update_dokumen($where,$data,'tb_dokumen');
+    $this->model_dokumen->update_dokumen($where1,$data1,'histori_download_dokumen');
+    redirect('c_data_dokumen/permintaan_download');
+  }
+  public function modal_statusperpanjang()
+  { 
+    $dataperubahan = $this->input->post('iddokumens');
+    $query_dokumen = $this->db->query("SELECT *,tb_dokumen.id AS iddkm FROM tb_dokumen 
+    LEFT JOIN tb_user ON tb_dokumen.id_user = tb_user.id
+    LEFT JOIN tb_master_jenis_dok ON tb_dokumen.jenis_dok = tb_master_jenis_dok.id
+    WHERE tb_dokumen.id = '$dataperubahan' && pengingat = '1'");
+    $data['perubahandokumen'] = $query_dokumen->result_array(); 
+    foreach($data as $row)
+    {
+      echo $row[0]['nama_dokumen'].' : ';
+       $str = $row[0]['masa_aktif'];
+       $tanggal = explode("-",$str);
+       $format_tgl = str_replace("/","-",$tanggal[1],$i);
+       $hari = $row[0]['durasi_tgl'];
+       $bulan = $row[0]['durasi_bulan'];
+       $tahun = $row[0]['durasi_tahun'];
+       $tgl1    = $format_tgl; 
+       $tgl2    = date('d-m-Y', strtotime('-'.$hari.'days', strtotime($tgl1)));
+       $tgl3    = date('d-m-Y', strtotime('-'.$bulan.'month', strtotime($tgl2)));
+       $tgl4    = date('d-m-Y', strtotime('-'.$tahun.'year', strtotime($tgl3)));
+       $awal  = date_create();
+        $akhir = date_create($tgl1);
+        $interval = $akhir->diff($awal);
+        echo $interval->format('<span style="color: red;"> %y Tahun, %m Bulan, %d Hari lagi</span>');
+        echo '</div>
+        <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tidak Diperpanjang</button>
+        <a href="'.base_url().'c_data_dokumen/edit_data_dokumen/'.$dataperubahan.'"><button  type="button" class="btn btn-primary">Memperbarui masa Aktif</button></a>
+        </div>';
+        // echo $interval->format('%a total days')."\n"; 
+        
+         
+
+    }
+  }
+  
+
+}
+ ?>

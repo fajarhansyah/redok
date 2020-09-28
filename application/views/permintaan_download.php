@@ -48,20 +48,34 @@
                                 ?>
                                 <tr>
                                     <td><?php echo $no ?></td>
-                                    <td><?php echo $ddd['log'] ?></td>
+                                    <td><?php echo date('d-m-Y', strtotime($ddd['log']));
+                                    ?></td>
                                     <td><?php echo $ddd['username'] ?></td>
                                     <td><?php echo $ddd['status'] ?></td>
                                     <td><?php echo $ddd['keterangan'] ?></td> 
-                                    <td><?php echo $ddd['tanggal_download'] ?></td> 
-                                    <td><input  style="height:35px" type="text" value="<?php echo $ddd['kode_unik'] ?>" id="myInput" readonly></td>
+                                    <td><?php 
+                                    if( $ddd['tanggal_download'] != ''){
+                                      echo date('d-m-Y', strtotime($ddd['tanggal_download']));
+                                    }
+                                    ?></td> 
+                                    <td><input  style="height:35px" type="text" value="<?php echo $ddd['kode_unik'] ?>" id="myInput<?php echo $no ?>" readonly></td>
                                     <td>
-                                        <button type="button" class="btn btn-block btn-warning" data-toggle="modal" data-target="#detailmodal">Detail</button>
-                                        <button type="button" class="btn btn-block btn-primary" onclick="myFunction()">Salin</button>
-                                        <button type="button" class="btn btn-block btn-success mt-2">Kirim SMS</button>
+                                        <button type="button" class="btn btn-block btn-warning" data-toggle="modal" data-target="#detailmodal"><i class="fas fa-info-circle"></i></button>
+                                        <button type="button" class="btn btn-block btn-primary" onclick="myFunction<?php echo $no ?>()">Salin</button>
+                                        <button id="<?php echo $ddd['kode_unik']?>" onClick="reply_click1(this.id,<?php echo $ddd['no_telp']?>)" type="button" class="btn btn-block btn-success mt-2" data-toggle="modal" data-target="#kirimsms">Kirim Sms</button>
                                         <button id="<?php echo $ddd['iddkm']?>"  onClick="reply_click(this.id,<?php echo $ddd['idhistori']?>)" type="button" class="btn btn-block btn-danger mt-2" data-toggle="modal" data-target="#exampleModalCenter">Ditolak</button>
+                                        <script>
+                                          function myFunction<?php echo $no ?>() {
+                                            var copyText = document.getElementById("myInput<?php echo $no ?>");
+                                            copyText.select();
+                                            copyText.setSelectionRange(0, 99999)
+                                            document.execCommand("copy");
+                                          }
+                                        </script>
                                        
                                     </td>
                                 </tr>
+                                
                                 <?php endforeach; ?>
                                 <!-- <tr>
                                     <td>5</td>
@@ -123,7 +137,7 @@
                   <div class="modal-body">
                     <input type="hidden" id="myText" name="id" value="clicked_id">
                     <input type="hidden" id="myTex1" name="idhistori" value="clicken_name">
-                  Yakin ta Pean
+                  Apakah anda yakin akan menolak permintaan download
                   </div>
                   <div class="modal-footer">
                   <button type="submit" class="btn btn-danger" >Tolak</button>
@@ -143,14 +157,15 @@
                 </button>
                 </div>
                 <div class="modal-body">
-                IP : <span style="color: red;"></span> <br>
+                IP : <span style="color: red;"><?php echo $ip_address ?></span> <br>
                 Hostname : <span style="color: red;">Release.dnetsurabaya.id</span> <br>
                 City : <span style="color: red;">Surabaya</span> <br>
                 Region : <span style="color: red;">East Java</span> <br>
                 Country : <span style="color: red;">ID</span> <br>
                 Loc : <span style="color: red;">-7.2474,436.5423</span> <br>
                 Timezone : <span style="color: red;">Asia/Jakarta</span><br> 
-                Browser : <span style="color: red;">Chrome</span> 
+                Browser : <span style="color: red;"><?php echo $browser ?></span> <br> 
+                Operating Sistem : <span style="color: red;"><?php echo $os ?></span> 
                 <!-- IP : <span style="color: red;">202.148.25.3</span> <br>
                 Hostname : <span style="color: red;">Release.dnetsurabaya.id</span> <br>
                 City : <span style="color: red;">Surabaya</span> <br>
@@ -166,20 +181,52 @@
             </div>
         </div>
     </div>
-    <script>
-    function myFunction() {
-      var copyText = document.getElementById("myInput");
-      copyText.select();
-      copyText.setSelectionRange(0, 99999)
-      document.execCommand("copy");
-      alert("Code berhasil disalin");
-    }
+    <div class="modal fade" id="kirimsms" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <form action="<?php echo base_url()?>c_data_dokumen/sendsms" method="post">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                  <label for="recipient-name" class="col-form-label">Penerima:</label>
+                  <input type="text" class="form-control" name="notelp"  id="myText2" readonly>
+                </div>
+                <div class="form-group">
+                  <label for="message-text" class="col-form-label">Kode Unik:</label>
+                  <input type="text" class="form-control" name="pesan" id="myText3" readonly> 
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Send message</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
     
-</script>
+      <?php if ($this->session->flashdata('something')) {?>
+        <script>
+          $(document).ready(function(){
+            swal("Kode Unik Berhasil terkirim", "", "success");
+          });
+        </script>
+        
+      <?php }?>
 <script type="text/javascript">
   function reply_click(clicked_id,clicken_name)
   {
       document.getElementById("myText").value = clicked_id;
       document.getElementById("myTex1").value = clicken_name;
+  }
+  function reply_click1(kode_unik,notelp)
+  {
+      document.getElementById("myText2").value = notelp;
+      document.getElementById("myText3").value = kode_unik;
   }
 </script>
