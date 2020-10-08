@@ -51,8 +51,8 @@
                                 <td><?php echo $du['role'] ?></td>
                                 <td><?php echo $du['no_telp'] ?></td>
                                 <td>
-                                <?php echo anchor('c_master_user/edit_user/'.$du['id_user'], '<button type="button" class="btn  btn-primary btn-sm"><i class="far fa-edit"></i></button>') ?>
-                                    <?php echo anchor('c_master_user/delete/'.$du['id_user'], '<button type="button" class="btn  btn-danger btn-sm "><i class="fas fa-trash"></i></button>') ?>
+                                <?php echo anchor('c_master_user/edit_user/'.$du['id_user'], '<button type="button" class="btn  btn-primary btn-sm"><i class="far fa-edit" title="Edit"></i></button>') ?>
+                                    <?php echo anchor('c_master_user/delete/'.$du['id_user'], '<button type="button" class="btn  btn-danger btn-sm "><i class="fas fa-trash" title="Hapus"></i></button>') ?>
                                 </td>
                             </tr>
                             <?php endforeach; ?>

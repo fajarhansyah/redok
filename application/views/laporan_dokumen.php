@@ -60,6 +60,11 @@
                           </div>
                         </div>
                           <div style="position:absolute; right: 0;">
+                          
+                                  <?php 
+                                   $id = $this->session->userdata('id');
+                                    if($id != 1){
+                                  ?>
                             <div class="col-sm-12 mt-3">
                                 <!-- radio -->
                                 <label>Tampilkan Berdasarkan :</label>
@@ -78,6 +83,7 @@
                                   </div>
                                 </div>
                             </div>
+                            <?php }?>
                           </div>
                     </div>
                   </div>
@@ -94,11 +100,11 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <?php
-                            $no=0;
-                            foreach ($data_dokumen as $dd) :
-                            $no++;
-                        ?>
+                            <?php
+                                $no=0;
+                                foreach ($data_dokumen as $dd) :
+                                $no++;
+                            ?>
                             <tr>
                                 <td><?php echo $no ?></td>
                                 <td><?php echo $dd['nama_dokumen'] ?></td>
@@ -117,9 +123,9 @@
                                   <?php 
                                       $str =  $dd['masa_aktif'];
                                       $tanggal = explode("-",$str);
-                                      echo date('d/m/Y', strtotime($tanggal[0]));
+                                      echo $tanggal[0];
                                       echo ' - ';
-                                      echo date('d/m/Y', strtotime($tanggal[1]));
+                                      echo $tanggal[1];
                                   ?>
                                 </td>
                                 
@@ -166,43 +172,66 @@
           bag_keb();
         })
       })
-      $(document).click(function(){
+      $(document).ready(function(){
         $("#reservation").change(function(){
           reservation1();
         })
       })
-      $(document).click(function(){
+      $(document).ready(function(){
         $("#customRadio2").change(function(){
-            var customRadio2 = $("#customRadio2").val();
+            var reservation = $("#reservation").val();
+            var jenis_dokumen = $("#jenis_dokumen").val();
+            var bag_pemilik = $("#bag_pemilik").val();
+            var customRadio2='';
+            var customRadio3='';
+            if ($("#customRadio2").is(':checked')) {
+              var customRadio2 = $("#customRadio2").val();
+            }else if($("#customRadio3").is(':checked')){
+              var customRadio3 = $("#customRadio3").val();
+            };
             $.ajax({
               url : "<?php echo base_url('c_laporan/load_jenis_data_dokumen') ?>",
-              data: "customRadio2=" +customRadio2 ,
+              data: "reservation=" +reservation+"&jenis_dokumen=" +jenis_dokumen+"&bag_pemilik=" +bag_pemilik+"&customRadio2=" +customRadio2+"&customRadio3=" +customRadio3 ,
               success:function(data){
                 $('#example2 tbody').html(data);
+                
               }
             })
         })
       })
-      $(document).click(function(){
+      $(document).ready(function(){
         $("#customRadio1").change(function(){
-            var customRadio1 = $("#customRadio1").val();
+            var reservation = $("#reservation").val();
+            var jenis_dokumen = $("#jenis_dokumen").val();
+            var bag_pemilik = $("#bag_pemilik").val();
             $.ajax({
               url : "<?php echo base_url('c_laporan/load_jenis_data_dokumen') ?>",
-              data: "customRadio1=" +customRadio1 ,
+              data: "reservation=" +reservation+"&jenis_dokumen=" +jenis_dokumen+"&bag_pemilik=" +bag_pemilik ,
               success:function(data){
                 $('#example2 tbody').html(data);
+                
               }
             })
         })
       })
-      $(document).click(function(){
+      $(document).ready(function(){
         $("#customRadio3").change(function(){
+          var reservation = $("#reservation").val();
+          var jenis_dokumen = $("#jenis_dokumen").val();
+          var bag_pemilik = $("#bag_pemilik").val();
+          var customRadio2='';
+          var customRadio3='';
+          if ($("#customRadio2").is(':checked')) {
+            var customRadio2 = $("#customRadio2").val();
+          }else if($("#customRadio3").is(':checked')){
             var customRadio3 = $("#customRadio3").val();
+          };
             $.ajax({
               url : "<?php echo base_url('c_laporan/load_jenis_data_dokumen') ?>",
-              data: "customRadio3=" +customRadio3 ,
+              data: "reservation=" +reservation+"&jenis_dokumen=" +jenis_dokumen+"&bag_pemilik=" +bag_pemilik+"&customRadio2=" +customRadio2+"&customRadio3=" +customRadio3 ,
               success:function(data){
                 $('#example2 tbody').html(data);
+                
               }
             })
         })
@@ -210,32 +239,62 @@
 
 
       function jenis_dkm(){
+        var reservation = $("#reservation").val();
         var jenis_dokumen = $("#jenis_dokumen").val();
+        var bag_pemilik = $("#bag_pemilik").val();
+        var customRadio2='';
+        var customRadio3='';
+        if ($("#customRadio2").is(':checked')) {
+          var customRadio2 = $("#customRadio2").val();
+        }else if($("#customRadio3").is(':checked')){
+          var customRadio3 = $("#customRadio3").val();
+        };
         $.ajax({
           url : "<?php echo base_url('c_laporan/load_jenis_data_dokumen') ?>",
-          data: "jenis_dokumen=" +jenis_dokumen ,
+          data: "reservation=" +reservation+"&jenis_dokumen=" +jenis_dokumen+"&bag_pemilik=" +bag_pemilik+"&customRadio2=" +customRadio2+"&customRadio3=" +customRadio3,
           success:function(data){
             $('#example2 tbody').html(data);
+            
           }
         })
       } 
       function bag_keb(){
+        var reservation = $("#reservation").val();
+        var jenis_dokumen = $("#jenis_dokumen").val();
         var bag_pemilik = $("#bag_pemilik").val();
+        var customRadio2='';
+        var customRadio3='';
+        if ($("#customRadio2").is(':checked')) {
+          var customRadio2 = $("#customRadio2").val();
+        }else if($("#customRadio3").is(':checked')){
+          var customRadio3 = $("#customRadio3").val();
+        };
         $.ajax({
           url : "<?php echo base_url('c_laporan/load_jenis_data_dokumen') ?>",
-          data: "bag_pemilik=" +bag_pemilik ,
+          data: "reservation=" +reservation+"&jenis_dokumen=" +jenis_dokumen+"&bag_pemilik=" +bag_pemilik+"&customRadio2=" +customRadio2+"&customRadio3=" +customRadio3,
           success:function(data){
             $('#example2 tbody').html(data);
+           
           }
         })
       } 
       function reservation1(){
         var reservation = $("#reservation").val();
+        var jenis_dokumen = $("#jenis_dokumen").val();
+        var bag_pemilik = $("#bag_pemilik").val();
+        var customRadio2='';
+        var customRadio3='';
+        if ($("#customRadio2").is(':checked')) {
+          var customRadio2 = $("#customRadio2").val();
+        }else if($("#customRadio3").is(':checked')){
+          var customRadio3 = $("#customRadio3").val();
+        };
         $.ajax({
           url : "<?php echo base_url('c_laporan/load_jenis_data_dokumen') ?>",
-          data: "reservation=" +reservation ,
+          data: "reservation=" +reservation+"&jenis_dokumen=" +jenis_dokumen+"&bag_pemilik=" +bag_pemilik+"&customRadio2=" +customRadio2+"&customRadio3=" +customRadio3,
           success:function(data){
             $('#example2 tbody').html(data);
+            
           }
         })
       } 

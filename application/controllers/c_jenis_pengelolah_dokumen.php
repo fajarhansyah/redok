@@ -1,0 +1,82 @@
+<?php
+class C_jenis_pengelolah_dokumen extends CI_Controller{
+    public function __construct(){
+        parent::__construct();
+        if($this->session->userdata('role_id') == ''){
+          $this->session->set_flashdata('pesan','<div class="alert alert-danger alert-dismissible fade show" role="alert">
+              Anda Belum Login
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>');
+            redirect('auth/login');
+        }
+      }
+      public function index()
+      {   
+          $id = $this->session->userdata('id');
+          $query_dokumen = $this->db->query("SELECT * FROM `hkm_master_jenis_dokumen`");
+          $query_notifikasi = $this->db->query("SELECT *,tb_dokumen.id AS iddkm FROM tb_dokumen 
+          LEFT JOIN tb_user ON tb_dokumen.id_user = tb_user.id
+          WHERE tb_dokumen.id_user = '$id' && pengingat = '1'");
+          $jumlah_query_notifikasi = $this->db->query("SELECT *,COUNT(tb_dokumen.id) AS jn FROM tb_dokumen 
+          LEFT JOIN tb_user ON tb_dokumen.id_user = tb_user.id
+          WHERE tb_dokumen.id_user = '$id' && pengingat = '1'");
+          $data['notifikasi_reminder'] = $query_notifikasi->result_array();
+          $data['jumlah_notifikasi_reminder'] = $jumlah_query_notifikasi->result_array();
+          $data['jenis_dokumen'] = $query_dokumen->result_array();
+          $this->load->view('templates/header',$data);
+          $this->load->view('templates/sidebar');
+          $this->load->view('master_jenis_pengelolah_dokumen',$data);
+          $this->load->view('templates/footer');
+        
+      }
+      public function form_jenis_dokumen()
+      { 
+        $this->load->view('tambah-master_jenis_pengelolah_dokumen');
+      }
+      public function tambah_jenis_dokumen()
+      {
+        $nama_jenis_dokumen = $this->input->post('nama_jenis_dokumen');
+        $status_jenis_dokumen = $this->input->post('status_jenis_dokumen');
+        $keterangan = $this->input->post('keterangan');
+        
+        $data = array(
+          'nama_jenis_dokumen' => $nama_jenis_dokumen,
+          'status_jenis_dokumen' => $status_jenis_dokumen,
+          'keterangan' => $keterangan
+        );
+        $this->model_jenis_dokumen->tambah_jenis_dokumen($data, 'hkm_master_jenis_dokumen');
+        redirect('c_jenis_pengelolah_dokumen/index');
+      }
+      public function edit_jenis_dokumen($id)
+      {
+        $where = array('id_jenis_dokumen' =>$id);
+        $data['jenis_dokumen'] = $this->model_jenis_dokumen->edit_jenis_dokumen($where,'hkm_master_jenis_dokumen')->result();
+        
+        $this->load->view('edit-master_jenis_pengelolah_dokumen',$data);
+      }
+      public function update_jenis_dokumen()
+      {
+        $id       = $this->input->post('id');
+        $nama_jenis_dokumen = $this->input->post('nama_jenis_dokumen');
+        $status_jenis_dokumen = $this->input->post('status_jenis_dokumen');
+        $keterangan = $this->input->post('keterangan');
+        
+        $data = array(
+          'nama_jenis_dokumen' => $nama_jenis_dokumen,
+          'status_jenis_dokumen' => $status_jenis_dokumen,
+          'keterangan' => $keterangan
+        );
+        $where = array('id_jenis_dokumen' => $id);
+        $this->model_dokumen->update_dokumen($where,$data,'hkm_master_jenis_dokumen');
+        redirect('c_jenis_pengelolah_dokumen/index');
+      }
+      public function delete($id)
+        {
+        $this->db->query("DELETE FROM `reminder_dok`.`hkm_master_jenis_dokumen` WHERE `hkm_master_jenis_dokumen`.`id_jenis_dokumen` = '$id'");
+        redirect('c_jenis_pengelolah_dokumen/index');
+        }
+
+}
+ ?>

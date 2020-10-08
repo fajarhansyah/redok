@@ -33,7 +33,8 @@
                         
                           <a href="<?php echo base_url() ?>c_data_dokumen/form_data_dokumen" class="col-md-2"><button type="button" class="btn btn-block btn-info btn-xs col-md-12">Tambah Dokumen</button></a>
                           <a href="<?php echo base_url();?>c_download_dokumen/detail_download_dokumen" class="col-md-3"><button type="button" class="btn btn-block btn-info btn-xs">Request Download Dokumen</button></a>
-                          <div style="position: absolute;right: 0;"><a href="<?php echo base_url() ?>c_data_dokumen/permintaan_download"><button type="button" class="btn btn-block btn-info btn-xs">Permintaan Download <span class="badge bg-success">  
+                          <div style="position: absolute;right: 0;"><a href="<?php echo base_url() ?>c_data_dokumen/permintaan_download"><button type="button" class="btn btn-block btn-info btn-xs">Permintaan Download 
+                            <span class="badge bg-success">  
                                 <?php
                                   foreach ($jumlahnotifikasi as $dd) :
                                 ?>
@@ -133,11 +134,9 @@
                                 <td><?php echo $dd['pic'] ?></td>
                                 <td>
                                   <?php 
-                                      $str =  $dd['masa_aktif'];
-                                      $tanggal = explode("-",$str);
-                                      echo date('d/m/Y', strtotime($tanggal[0]));
+                                      echo  $cnvrt_masa_aktif_awal = date('d/m/Y', strtotime($dd['masa_aktif_awal']));
                                       echo ' - ';
-                                      echo date('d/m/Y', strtotime($tanggal[1]));
+                                      echo $cnvrt_masa_aktif_awal = date('d/m/Y', strtotime($dd['masa_aktif_akhir']));
                                   ?>
                                 </td>
                                 
@@ -160,11 +159,17 @@
                                    $id = $this->session->userdata('id');
                                     if($dd['id_user'] == $id){
                                   ?>
-                                  <?php echo anchor('c_data_dokumen/edit_data_dokumen/'.$dd['iddkm'], '<button type="button" class="btn btn-primary btn-sm"><i class="far fa-edit"></i></button>') ?>
-                                  <button type="button" id="<?php echo $dd['iddkm']?>" onClick="reply_click(this.id)" class="btn  bg-gradient-success btn-sm " data-toggle="modal" data-target="#exampleModal"><i class="fas fa-download"></i></button>
-                                  <?php echo anchor('c_data_dokumen/delete/'.$dd['iddkm'], '<button type="button" class="btn  btn-danger btn-sm"><i class="fas fa-trash"></i></button>') ?>
+                                  <?php echo anchor('c_data_dokumen/edit_data_dokumen/'.$dd['iddkm'], '<button type="button" class="btn btn-primary btn-sm mt-2" title="Edit"><i class="far fa-edit"></i></button>') ?>
+                                  <form action="<?php echo base_url(). 'c_download_dokumen/lakukan_download_pemilik/'.$dd['upload_dokumen'] ?>" method="post">
+                                      <div class="input-group input-group-sm mt-2">
+                                        <span class="input-group-append">
+                                        <button type="submit" class="btn bg-gradient-success btn-sm" title="Download"><i class="fas fa-download"></i></button>
+                                        </span>
+                                      </div>
+                                    </form>
+                                  <?php echo anchor('c_data_dokumen/delete/'.$dd['iddkm'], '<button type="button" class="btn  btn-danger btn-sm mt-2" title="Hapus"><i class="fas fa-trash"></i></button>') ?>
                                     <?php }else{ ?>
-                                    <button type="button" id="<?php echo $dd['iddkm']?>" onClick="reply_click(this.id)" class="btn  bg-gradient-success btn-sm" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-download"></i></button>
+                                    <button type="button" id="<?php echo $dd['iddkm']?>" onClick="reply_click(this.id)" class="btn  bg-gradient-success btn-sm mt-2" title="Download" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-download"></i></button>
                                     <?php } ?>
                                 </td>
                             </tr>
@@ -185,22 +190,7 @@
     </section>
     <!-- /.content -->
   </div>
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalCenterTitle">Status Perpanjang </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                </div>
-                <div class="modal-body">
-                <div class="result"></div>
-                
-                </div>
-            </div>
-        </div>
-    </div>
+    
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
@@ -226,23 +216,7 @@
           </div>
         </div>
     </div>
-    <script>
-      $(document).ready(function(){
-        $(".angelese").click(function(){
-          
-          var iddokumen = $(this).data("id");
-          $.ajax({
-            url:"<?php echo base_url()?>c_data_dokumen/modal_statusperpanjang",
-            type:"POST",
-            data:{"iddokumens":iddokumen},
-            success:function(response){
-              $('.result').html(response);
-
-            }
-          });
-        });
-      });
-    </script>
+    
     <script type="text/javascript">
       function reply_click(clicked_id)
       {
@@ -260,41 +234,61 @@
           bag_keb();
         })
       })
-      $(document).click(function(){
+      $(document).ready(function(){
         $("#reservation").change(function(){
           reservation1();
         })
       })
-      $(document).click(function(){
+      $(document).ready(function(){
         $("#customRadio2").change(function(){
-            var customRadio2 = $("#customRadio2").val();
+            var reservation = $("#reservation").val();
+            var jenis_dokumen = $("#jenis_dokumen").val();
+            var bag_pemilik = $("#bag_pemilik").val();
+            var customRadio2='';
+            var customRadio3='';
+            if ($("#customRadio2").is(':checked')) {
+              var customRadio2 = $("#customRadio2").val();
+            }else if($("#customRadio3").is(':checked')){
+              var customRadio3 = $("#customRadio3").val();
+            };
             $.ajax({
               url : "<?php echo base_url('c_data_dokumen/load_jenis_data_dokumen') ?>",
-              data: "customRadio2=" +customRadio2 ,
+              data: "reservation=" +reservation+"&jenis_dokumen=" +jenis_dokumen+"&bag_pemilik=" +bag_pemilik+"&customRadio2=" +customRadio2+"&customRadio3=" +customRadio3 ,
               success:function(data){
                 $('#example2 tbody').html(data);
               }
             })
         })
       })
-      $(document).click(function(){
+      $(document).ready(function(){
         $("#customRadio1").change(function(){
-            var customRadio1 = $("#customRadio1").val();
+            var reservation = $("#reservation").val();
+            var jenis_dokumen = $("#jenis_dokumen").val();
+            var bag_pemilik = $("#bag_pemilik").val();
             $.ajax({
               url : "<?php echo base_url('c_data_dokumen/load_jenis_data_dokumen') ?>",
-              data: "customRadio1=" +customRadio1 ,
+              data: "reservation=" +reservation+"&jenis_dokumen=" +jenis_dokumen+"&bag_pemilik=" +bag_pemilik ,
               success:function(data){
                 $('#example2 tbody').html(data);
               }
             })
         })
       })
-      $(document).click(function(){
+      $(document).ready(function(){
         $("#customRadio3").change(function(){
+          var reservation = $("#reservation").val();
+          var jenis_dokumen = $("#jenis_dokumen").val();
+          var bag_pemilik = $("#bag_pemilik").val();
+          var customRadio2='';
+          var customRadio3='';
+          if ($("#customRadio2").is(':checked')) {
+            var customRadio2 = $("#customRadio2").val();
+          }else if($("#customRadio3").is(':checked')){
             var customRadio3 = $("#customRadio3").val();
+          };
             $.ajax({
               url : "<?php echo base_url('c_data_dokumen/load_jenis_data_dokumen') ?>",
-              data: "customRadio3=" +customRadio3 ,
+              data: "reservation=" +reservation+"&jenis_dokumen=" +jenis_dokumen+"&bag_pemilik=" +bag_pemilik+"&customRadio2=" +customRadio2+"&customRadio3=" +customRadio3 ,
               success:function(data){
                 $('#example2 tbody').html(data);
               }
@@ -304,20 +298,38 @@
 
 
       function jenis_dkm(){
+        var reservation = $("#reservation").val();
         var jenis_dokumen = $("#jenis_dokumen").val();
+        var bag_pemilik = $("#bag_pemilik").val();
+        var customRadio2='';
+        var customRadio3='';
+        if ($("#customRadio2").is(':checked')) {
+          var customRadio2 = $("#customRadio2").val();
+        }else if($("#customRadio3").is(':checked')){
+          var customRadio3 = $("#customRadio3").val();
+        };
         $.ajax({
           url : "<?php echo base_url('c_data_dokumen/load_jenis_data_dokumen') ?>",
-          data: "jenis_dokumen=" +jenis_dokumen ,
+          data: "reservation=" +reservation+"&jenis_dokumen=" +jenis_dokumen+"&bag_pemilik=" +bag_pemilik+"&customRadio2=" +customRadio2+"&customRadio3=" +customRadio3,
           success:function(data){
             $('#example2 tbody').html(data);
           }
         })
       } 
       function bag_keb(){
+        var reservation = $("#reservation").val();
+        var jenis_dokumen = $("#jenis_dokumen").val();
         var bag_pemilik = $("#bag_pemilik").val();
+        var customRadio2='';
+        var customRadio3='';
+        if ($("#customRadio2").is(':checked')) {
+          var customRadio2 = $("#customRadio2").val();
+        }else if($("#customRadio3").is(':checked')){
+          var customRadio3 = $("#customRadio3").val();
+        };
         $.ajax({
           url : "<?php echo base_url('c_data_dokumen/load_jenis_data_dokumen') ?>",
-          data: "bag_pemilik=" +bag_pemilik ,
+          data: "reservation=" +reservation+"&jenis_dokumen=" +jenis_dokumen+"&bag_pemilik=" +bag_pemilik+"&customRadio2=" +customRadio2+"&customRadio3=" +customRadio3,
           success:function(data){
             $('#example2 tbody').html(data);
           }
@@ -325,9 +337,18 @@
       } 
       function reservation1(){
         var reservation = $("#reservation").val();
+        var jenis_dokumen = $("#jenis_dokumen").val();
+        var bag_pemilik = $("#bag_pemilik").val();
+        var customRadio2='';
+        var customRadio3='';
+        if ($("#customRadio2").is(':checked')) {
+          var customRadio2 = $("#customRadio2").val();
+        }else if($("#customRadio3").is(':checked')){
+          var customRadio3 = $("#customRadio3").val();
+        };
         $.ajax({
           url : "<?php echo base_url('c_data_dokumen/load_jenis_data_dokumen') ?>",
-          data: "reservation=" +reservation ,
+          data: "reservation=" +reservation+"&jenis_dokumen=" +jenis_dokumen+"&bag_pemilik=" +bag_pemilik+"&customRadio2=" +customRadio2+"&customRadio3=" +customRadio3,
           success:function(data){
             $('#example2 tbody').html(data);
           }

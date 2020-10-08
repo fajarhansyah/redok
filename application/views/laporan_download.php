@@ -59,7 +59,7 @@
                             </div>
                           </div>
                         </div>
-                      <table id="example2" class="table table-bordered table-hover">
+                      <table id="example1" class="table table-bordered table-hover">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -73,7 +73,7 @@
                             </thead>
                             <tbody>
                             <?php
-                                    $no=0;
+                                    $no=1;
                                     foreach ($data_download_dokumen as $ddd) :
                                     $no++;
                                 ?>
@@ -85,8 +85,9 @@
                                     <td><?php echo $ddd['keterangan'] ?></td> 
                                     <td>
                                       <?php 
-                                      $tanggal = $ddd['tanggal_download'] ;
-                                      echo date('d-m-Y', strtotime($tanggal));
+                                      if( $ddd['tanggal_download'] != ''){
+                                        echo date('d/m/Y', strtotime($ddd['tanggal_download']));
+                                      }
                                       ?>
                                     </td> 
                                     <td><input  style="height:35px" type="text" value="<?php echo $ddd['kode_unik'] ?>" id="myInput<?php echo $no ?>" readonly></td>
@@ -122,40 +123,47 @@
           peminta();
         })
       })
-      $(document).click(function(){
+      $(document).ready(function(){
         $("#reservation").change(function(){
           reservation1();
         })
       })
 
-
       function status(){
         var status = $("#status").val();
+        var peminta = $("#peminta").val();
+        var reservation = $("#reservation").val();
+        
         $.ajax({
           url : "<?php echo base_url('c_laporan/load_download_dokumen') ?>",
-          data: "status=" +status ,
+          data: "status=" +status +"&peminta=" +peminta + "&reservation=" +reservation,
           success:function(data){
-            $('#example2 tbody').html(data);
+            $('#example1 tbody').html(data);
           }
         })
       } 
       function peminta(){
+        var status = $("#status").val();
         var peminta = $("#peminta").val();
+        var reservation = $("#reservation").val();
         $.ajax({
           url : "<?php echo base_url('c_laporan/load_download_dokumen') ?>",
-          data: "peminta=" +peminta ,
+          data: "status=" +status +"&peminta=" +peminta + "&reservation=" +reservation ,
           success:function(data){
-            $('#example2 tbody').html(data);
+            $('#example1 tbody').html(data);
+
           }
         })
       } 
       function reservation1(){
+        var status = $("#status").val();
+        var peminta = $("#peminta").val();
         var reservation = $("#reservation").val();
         $.ajax({
           url : "<?php echo base_url('c_laporan/load_download_dokumen') ?>",
-          data: "reservation=" +reservation ,
+          data: "status=" +status +"&peminta=" +peminta + "&reservation=" +reservation ,
           success:function(data){
-            $('#example2 tbody').html(data);
+            $('#example1 tbody').html(data);
           }
         })
       } 

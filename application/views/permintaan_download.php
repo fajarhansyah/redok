@@ -60,10 +60,10 @@
                                     ?></td> 
                                     <td><input  style="height:35px" type="text" value="<?php echo $ddd['kode_unik'] ?>" id="myInput<?php echo $no ?>" readonly></td>
                                     <td>
-                                        <button type="button" class="btn btn-block btn-warning" data-toggle="modal" data-target="#detailmodal"><i class="fas fa-info-circle"></i></button>
-                                        <button type="button" class="btn btn-block btn-primary" onclick="myFunction<?php echo $no ?>()">Salin</button>
-                                        <button id="<?php echo $ddd['kode_unik']?>" onClick="reply_click1(this.id,<?php echo $ddd['no_telp']?>)" type="button" class="btn btn-block btn-success mt-2" data-toggle="modal" data-target="#kirimsms">Kirim Sms</button>
-                                        <button id="<?php echo $ddd['iddkm']?>"  onClick="reply_click(this.id,<?php echo $ddd['idhistori']?>)" type="button" class="btn btn-block btn-danger mt-2" data-toggle="modal" data-target="#exampleModalCenter">Ditolak</button>
+                                        <button type="button" class="btn  btn-warning btn-sm mt-2" data-toggle="modal" data-target="#detailmodal" title="Detail"><i class="fas fa-info-circle" style="color: white;"></i></button>
+                                        <button type="button" class="btn  btn-primary btn-sm mt-2" onclick="myFunction<?php echo $no ?>()" title="Copy Code"><i class="fas fa-copy"></i></button>
+                                        <button id="<?php echo $ddd['kode_unik']?>" onClick="reply_click1(this.id,<?php echo $ddd['no_telp']?>)" type="button" title="Kirim SMS" class="btn  btn-success btn-sm mt-2" data-toggle="modal" data-target="#kirimsms"><i class="fas fa-sms"></i></button>
+                                        <button id="<?php echo $ddd['iddkm']?>"  onClick="reply_click(this.id,<?php echo $ddd['idhistori']?>)" type="button" class="btn  btn-danger btn-sm mt-2" data-toggle="modal" data-target="#exampleModalCenter" title="Tolak"><i class="fas fa-window-close"></i></button>
                                         <script>
                                           function myFunction<?php echo $no ?>() {
                                             var copyText = document.getElementById("myInput<?php echo $no ?>");

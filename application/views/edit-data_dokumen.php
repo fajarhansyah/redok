@@ -61,49 +61,6 @@
               </p>
             </a>
           </li>
-          <?php 
-          $role_id = $this->session->userdata('role_id');
-          if($role_id == 1){ ?>
-          <li class="nav-item ">
-            <a href="<?php echo base_url() ?>c_master_jenis_dokumen" class="nav-link ">
-            <i class="nav-icon fab fa-buffer"></i>
-              <p>
-                Master Jenis Dokumen
-              </p>
-            </a>
-          </li>
-          <?php }?>
-          <!-- <li class="nav-item">
-            <a href="<?php echo base_url() ?>c_download_dokumen" class="nav-link ">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                Download dokumen
-              </p>
-            </a>
-          </li> -->
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-scroll"></i>
-              <p>
-                Laporan
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="<?php echo base_url() ?>c_laporan/laporan_dokumen" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Laporan Dokumen</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo base_url() ?>c_laporan/laporan_download" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Laporan Download</p>
-                </a>
-              </li>
-            </ul>
-          </li>
           
         </ul>
       </nav>
@@ -170,6 +127,7 @@
                             <label for="exampleInputEmail1">PIC</label>
                             <input type="text" class="form-control" id="exampleInputEmail1" name="pic" value="<?php echo $dd->pic ?>">
                         </div>
+                        
                         <div class="form-group">
                             <label>Masa aktif:</label>
                             <div class="input-group">
@@ -178,7 +136,7 @@
                                   <i class="far fa-calendar-alt"></i>
                                 </span>
                               </div>
-                              <input type="text" class="form-control float-right" id="reservation" value="<?php echo $dd->masa_aktif ?>"  name="masa_aktif">
+                              <input type="text" class="form-control float-right" id="reservation" value="<?php echo date('d/m/Y', strtotime($dd->masa_aktif_awal))." - ".date('d/m/Y', strtotime($dd->masa_aktif_akhir)) ?>"  name="masa_aktif">
                             </div>
                             <!-- /.input group -->
                         </div>
@@ -266,7 +224,7 @@
                                   ?> 
                           <?php endforeach; ?></td>
                         <td><?php echo $hdd['pic'] ?></td>
-                        <td><?php echo $hdd['log'] ?></td>
+                        <td><?php echo $cnvrt_masa_aktif_awal = date('d-m-Y', strtotime($hdd['log'])); ?></td>
                     </tr>
                     <?php endforeach; ?>
                 </tbody>
@@ -301,7 +259,7 @@
                             </span>
                           </div>
                           <input type="hidden" class="form-control float-right" value="<?php echo $dd->id ?>" name="id_dokumen">
-                          <input type="text" class="form-control float-right"  value="<?php echo $dd->masa_aktif ?>"  id="reservation1" name="pembaruan_tanggal">
+                          <input type="text" class="form-control float-right"  value="<?php echo date('d/m/Y', strtotime($dd->masa_aktif_awal))." - ".date('d/m/Y', strtotime($dd->masa_aktif_akhir)) ?>"  id="reservation1" name="pembaruan_tanggal">
                         </div>
                         <!-- /.input group -->
                     </div>
@@ -383,7 +341,7 @@ $(document).ready(function() {
       //Datemask dd/mm/yyyy
       $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
       //Datemask2 mm/dd/yyyy
-      $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
+      $('#datemask2').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
       //Money Euro
       $('[data-mask]').inputmask()
   
@@ -392,14 +350,24 @@ $(document).ready(function() {
           format: 'L'
       });
       //Date range picker
-      $('#reservation').daterangepicker()
-      $('#reservation1').daterangepicker()
+      $('#reservation').daterangepicker({
+        locale: {
+          format: 'DD/MM/YYYY'
+        }
+      })
+      $('#reservation1').daterangepicker(
+        {
+          locale: {
+            format: 'DD/MM/YYYY'
+          }
+        }
+      )
       //Date range picker with time picker
       $('#reservationtime').daterangepicker({
         timePicker: true,
         timePickerIncrement: 30,
         locale: {
-          format: 'MM/DD/YYYY hh:mm A'
+          format: 'DD/MM/YYYY hh:mm A'
         }
       })
       //Date range as a button
@@ -501,5 +469,16 @@ $(document).ready(function() {
     };
     // DropzoneJS Demo Code End
   </script>
+    <script type="text/javascript">
+     $(document).ready(function() {
+      var iddkm = $("input[name=id]").val();
+    // get the current URL
+    var url = $(location).attr('href');
+    // if the URL ends with the anchor #portfolioModal93 then we want to open the modal
+    if(url == '<?php echo base_url()?>c_data_dokumen/edit_data_dokumen/'+iddkm+'#exampleModalCenter') {
+        $('#exampleModalCenter').modal('show');
+    }
+    });
+</script>
 </body>
 </html>

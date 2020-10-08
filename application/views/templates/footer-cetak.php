@@ -137,12 +137,34 @@
     <script>
         $(document).ready(function() {
             $('#example2').DataTable( {
-                dom: 'Bfrtip',
-                "bPaginate": false,
-                buttons: [
-                    'excelHtml5',
-                    'pdfHtml5'
-                ]
+              dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'excelHtml5',
+                title: 'Laporan Dokumen'
+            },
+            {
+                extend: 'pdfHtml5',
+                title: 'Laporan Dokumen'
+            }
+        ]
+            } );
+        } );
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#example1').DataTable( {
+              dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'excelHtml5',
+                title: 'Laporan Dokumen'
+            },
+            {
+                extend: 'pdfHtml5',
+                title: 'Laporan Dokumen'
+            }
+        ]
             } );
         } );
     </script>

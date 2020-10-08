@@ -113,49 +113,6 @@
               </p>
             </a>
           </li>
-          <?php 
-          $role_id = $this->session->userdata('role_id');
-          if($role_id == 1){ ?>
-          <li class="nav-item ">
-            <a href="<?php echo base_url() ?>c_master_jenis_dokumen" class="nav-link ">
-            <i class="nav-icon fab fa-buffer"></i>
-              <p>
-                Master Jenis Dokumen
-              </p>
-            </a>
-          </li>
-          <?php }?>
-          <!-- <li class="nav-item">
-            <a href="<?php echo base_url() ?>c_download_dokumen" class="nav-link ">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                Download dokumen
-              </p>
-            </a>
-          </li> -->
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-scroll"></i>
-              <p>
-                Laporan
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="<?php echo base_url() ?>c_laporan/laporan_dokumen" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Laporan Dokumen</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo base_url() ?>c_laporan/laporan_download" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Laporan Download</p>
-                </a>
-              </li>
-            </ul>
-          </li>
           
         </ul>
       </nav>
@@ -345,7 +302,13 @@ $(function () {
           format: 'L'
       });
       //Date range picker
-      $('#reservation').daterangepicker()
+      $('#reservation').daterangepicker(
+        {
+        locale: {
+          format: 'DD/MM/YYYY'
+        }
+      }
+      )
       //Date range picker with time picker
       $('#reservationtime').daterangepicker({
         timePicker: true,

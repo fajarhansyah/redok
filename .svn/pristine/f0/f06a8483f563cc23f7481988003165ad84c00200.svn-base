@@ -1,0 +1,30 @@
+<?php
+class C_pengelolah_dokumen extends CI_Controller{
+  public function index()
+  {
+    $id = $this->session->userdata('id');
+    $query_notifikasi = $this->db->query("SELECT *,tb_dokumen.id AS iddkm FROM tb_dokumen 
+    LEFT JOIN tb_user ON tb_dokumen.id_user = tb_user.id
+    WHERE tb_dokumen.id_user = '$id' && pengingat = '1'");
+    $jumlah_query_notifikasi = $this->db->query("SELECT *,COUNT(tb_dokumen.id) AS jn FROM tb_dokumen 
+    LEFT JOIN tb_user ON tb_dokumen.id_user = tb_user.id
+    WHERE tb_dokumen.id_user = '$id' && pengingat = '1'");
+    $query_dokumen = $this->db->query("SELECT * FROM `hkm_dokumen`");
+    $data['notifikasi_reminder'] = $query_notifikasi->result_array();
+    $data['jumlah_notifikasi_reminder'] = $jumlah_query_notifikasi->result_array();
+    $data['data_dokumen'] = $query_dokumen->result_array();
+      $this->load->view('templates/header',$data);
+      $this->load->view('templates/sidebar');
+      $this->load->view('pengelolah_dokumen',$data);
+      $this->load->view('templates/footer');
+  }
+    
+  
+  public function delete($id)
+	{
+	$this->db->query("DELETE FROM `reminder_dok`.`hkm_dokumen` WHERE `hkm_dokumen`.`id_dokumen` = '$id'"); 
+	redirect('c_pengelolah_dokumen/index');
+  }
+
+}
+ ?>
