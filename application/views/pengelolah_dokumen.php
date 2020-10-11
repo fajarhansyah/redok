@@ -61,7 +61,8 @@
                                 <td>
                                     <?php echo anchor('c_pengelolah_dokumen/detail_dokumen/'.$dd['id_dokumen'], '<button type="button" class="btn  btn-warning btn-sm mt-2"  title="Detail"><i class="fas fa-info-circle" style="color: white;"></i></button>') ?>
                                     <?php echo anchor('c_pengelolah_dokumen/edit_data_dokumen/'.$dd['id_dokumen'], '<button type="button" class="btn btn-primary btn-sm mt-2"  title="Edit"><i class="far fa-edit"></i></button>') ?>
-                                        
+                                    <?php echo anchor('c_pengelolah_dokumen/kirim_email', '<button type="button" class="btn btn-dark btn-sm mt-2"  title="Kirim Email"><i class="fas fa-envelope-square"></i></button>') ?>
+                                    <?php echo anchor('c_pengelolah_dokumen/lakukan_download_pemilik/'.$dd['upload_dokumen'] , '<button type="submit" class="btn bg-gradient-success btn-sm mt-2" title="Download"><i class="fas fa-download"></i></button>') ?>
                                     <?php echo anchor('c_pengelolah_dokumen/delete/'.$dd['id_dokumen'], '<button type="button" class="btn  btn-danger btn-sm mt-2" title="Hapus"><i class="fas fa-trash"></i></button>') ?>
                                 </td>
                                 <!-- Modal detail -->

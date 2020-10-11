@@ -20,7 +20,7 @@ class C_data_dokumen extends CI_Controller{
       $query_dokumen = $this->db->query("SELECT *,tb_dokumen.id AS iddkm FROM tb_dokumen 
       LEFT JOIN tb_user ON tb_dokumen.id_user = tb_user.id
       LEFT JOIN tb_master_jenis_dok ON tb_dokumen.jenis_dok = tb_master_jenis_dok.id
-      WHERE tb_user.username = '$nama' OR tb_dokumen.akses_for LIKE '%$id%' ");
+      WHERE tb_user.username = '$nama' AND tb_dokumen.akses_for LIKE '%$id%' ");
       $query_permintaan_download = $this->db->query("SELECT *,tb_dokumen.id AS iddkm,histori_download_dokumen.id AS idhistori,COUNT(tb_dokumen.id) AS jn FROM tb_dokumen 
       LEFT JOIN tb_master_jenis_dok ON tb_dokumen.jenis_dok = tb_master_jenis_dok.id
       LEFT JOIN histori_download_dokumen ON tb_dokumen.id = histori_download_dokumen.id_dokumen
@@ -85,7 +85,7 @@ class C_data_dokumen extends CI_Controller{
     $query_dokumen = $this->db->query("SELECT *,tb_dokumen.id AS iddkm FROM tb_dokumen 
     LEFT JOIN tb_user ON tb_dokumen.id_user = tb_user.id
     LEFT JOIN tb_master_jenis_dok ON tb_dokumen.jenis_dok = tb_master_jenis_dok.id
-    WHERE tb_user.username = '$nama' OR tb_dokumen.akses_for LIKE '%$id%' ");
+    WHERE tb_user.username = '$nama' AND tb_dokumen.akses_for LIKE '%$id%' ");
     $query_permintaan_download = $this->db->query("SELECT *,tb_dokumen.id AS iddkm,histori_download_dokumen.id AS idhistori,COUNT(tb_dokumen.id) AS jn FROM tb_dokumen 
     LEFT JOIN tb_master_jenis_dok ON tb_dokumen.jenis_dok = tb_master_jenis_dok.id
     LEFT JOIN histori_download_dokumen ON tb_dokumen.id = histori_download_dokumen.id_dokumen
@@ -114,7 +114,7 @@ class C_data_dokumen extends CI_Controller{
     $customRadio3 = $_GET['customRadio3'];
 
     $check_where = false;
-    $where = '';
+    $where = "";
     if(!empty($customRadio1) || !empty($customRadio2) || !empty($customRadio3)){
       if (!empty($customRadio2)) {
         $check_where = true;
@@ -132,15 +132,15 @@ class C_data_dokumen extends CI_Controller{
       foreach ($jenis_dokumens as $jdkm){
         if ($check_where) {
           if ($check_js) {
-            $where = $where."OR tb_dokumen.jenis_dok = '$jdkm' ";
+            $where = $where."OR (tb_dokumen.jenis_dok = '$jdkm' AND tb_dokumen.id_user = '$id') OR (tb_dokumen.jenis_dok = '$jdkm' AND tb_dokumen.akses_for LIKE '%$id%') ";
           }else{
-            $where = $where."AND (tb_dokumen.jenis_dok = '$jdkm' ";
+            $where = $where."AND (tb_dokumen.jenis_dok = '$jdkm' AND tb_dokumen.id_user = '$id') OR (tb_dokumen.jenis_dok = '$jdkm' AND tb_dokumen.akses_for LIKE '%$id%' ";
             $check_js = true;
           }
         }else{
           $check_where = true;
           $check_js = true;
-          $where = "WHERE (tb_dokumen.jenis_dok = '$jdkm' ";
+          $where = "WHERE (tb_dokumen.jenis_dok = '$jdkm' AND tb_dokumen.id_user = '$id') OR (tb_dokumen.jenis_dok = '$jdkm' AND tb_dokumen.akses_for LIKE '%$id%' ";
         }
       }
       $where = $where.')';
@@ -151,15 +151,15 @@ class C_data_dokumen extends CI_Controller{
       foreach ($bag_pemiliks as $jdkm){
         if ($check_where) {
           if ($check_bp) {
-            $where = $where."OR tb_dokumen.bag_or_keb = '$jdkm' ";
+            $where = $where."OR (tb_dokumen.bag_or_keb = '$jdkm' AND tb_dokumen.id_user = '$id') OR (tb_dokumen.bag_or_keb = '$jdkm' AND tb_dokumen.akses_for LIKE '%$id%') ";
           }else{
             $check_bp = true;
-            $where = $where."AND (tb_dokumen.bag_or_keb = '$jdkm' ";
+            $where = $where."AND (tb_dokumen.bag_or_keb = '$jdkm' AND tb_dokumen.id_user = '$id') OR (tb_dokumen.bag_or_keb = '$jdkm' AND tb_dokumen.akses_for LIKE '%$id%' ";
           }
         }else{
           $check_where = true;
           $check_bp = true;
-          $where = "WHERE (tb_dokumen.bag_or_keb = '$jdkm' ";
+          $where = "WHERE (tb_dokumen.bag_or_keb = '$jdkm' AND tb_dokumen.id_user = '$id') OR (tb_dokumen.bag_or_keb = '$jdkm' AND tb_dokumen.akses_for LIKE '%$id%' ";
         }
       };
       $where = $where.')';
@@ -176,7 +176,7 @@ class C_data_dokumen extends CI_Controller{
         $crv_tgl_akhir = date('Y-m-d', strtotime($replc2));
         if ($check_where) {
           if($check_rs){
-            $where = $where."OR ((tb_dokumen.masa_aktif_awal BETWEEN '$crv_tgl_awal' AND '$crv_tgl_akhir') OR (tb_dokumen.masa_aktif_akhir BETWEEN '$crv_tgl_awal' AND '$crv_tgl_akhir') ";
+            $where = $where."OR ((tb_dokumen.masa_aktif_awal BETWEEN '$crv_tgl_awal' AND '$crv_tgl_akhir') OR (tb_dokumen.masa_aktif_akhir BETWEEN '$crv_tgl_awal' AND '$crv_tgl_akhir') AND tb_dokumen.id_user = '$id')  ";
           }else{
             $check_rs = true;
             $where = $where."AND ((tb_dokumen.masa_aktif_awal BETWEEN '$crv_tgl_awal' AND '$crv_tgl_akhir') OR (tb_dokumen.masa_aktif_akhir BETWEEN '$crv_tgl_awal' AND '$crv_tgl_akhir') ";
@@ -193,7 +193,7 @@ class C_data_dokumen extends CI_Controller{
     $query_dokumen = $this->db->query("SELECT *,tb_dokumen.id AS iddkm FROM tb_dokumen 
       LEFT JOIN tb_user ON tb_dokumen.id_user = tb_user.id
       LEFT JOIN tb_master_jenis_dok ON tb_dokumen.jenis_dok = tb_master_jenis_dok.id
-      $where");
+      $where ");
       // echo $where;die();
     $data1['data_dokumen'] = $query_dokumen->result_array();
     $no=1;
@@ -241,7 +241,13 @@ class C_data_dokumen extends CI_Controller{
             if($dd['id_user'] == $id){
           ?>
           <?php echo anchor('c_data_dokumen/edit_data_dokumen/'.$dd['iddkm'], '<button type="button" class="btn btn-primary btn-sm mt-2"><i class="far fa-edit" title="Edit"></i></button>') ?>
-          <button type="button" id="<?php echo $dd['iddkm']?>" onClick="reply_click(this.id)" class="btn  bg-gradient-success btn-sm mt-2" data-toggle="modal" title="Download" data-target="#exampleModal"><i class="fas fa-download"></i></button>
+            <form action="<?php echo base_url(). 'c_download_dokumen/lakukan_download_pemilik/'.$dd['upload_dokumen'] ?>" method="post">
+              <div class="input-group input-group-sm mt-2">
+                <span class="input-group-append">
+                <button type="submit" class="btn bg-gradient-success btn-sm" title="Download"><i class="fas fa-download"></i></button>
+                </span>
+              </div>
+            </form>
           <?php echo anchor('c_data_dokumen/delete/'.$dd['iddkm'], '<button type="button" class="btn  btn-danger btn-sm mt-2" title="Hapus"><i class="fas fa-trash"></i></button>') ?>
             <?php }else{ ?>
             <button type="button" id="<?php echo $dd['iddkm']?>" onClick="reply_click(this.id)" class="btn  bg-gradient-success btn-sm mt-2" data-toggle="modal" title="Download" data-target="#exampleModal"><i class="fas fa-download"></i></button>

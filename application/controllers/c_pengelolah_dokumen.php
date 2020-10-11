@@ -38,7 +38,7 @@ class C_pengelolah_dokumen extends CI_Controller{
     $id_pengakses = $this->session->userdata('id');
     $query_download_dokumen = $this->db->query("SELECT *,hkm_dokumen.upload_dokumen AS dkm_lama,hkm_dokumen.status AS sts_lama FROM hkm_dokumen
     LEFT JOIN hkm_dokumen_proses ON hkm_dokumen.id_dokumen = hkm_dokumen_proses.id_dokumen
-    WHERE hkm_dokumen.id_dokumen = '$id_dokumen'");
+    WHERE hkm_dokumen.id_dokumen = '$id_dokumen' && hkm_dokumen_proses.upload_dokumen != '' && hkm_dokumen_proses.status != '' && hkm_dokumen.upload_dokumen != ''");
     $query_notifikasi = $this->db->query("SELECT *,tb_dokumen.id AS iddkm FROM tb_dokumen 
     LEFT JOIN tb_user ON tb_dokumen.id_user = tb_user.id
     WHERE tb_dokumen.id_user = '$id_pengakses' && pengingat = '1'");
@@ -114,7 +114,18 @@ class C_pengelolah_dokumen extends CI_Controller{
         redirect('c_pengelolah_dokumen/index');
       }
       elseif ($status == 'Mengubah') {
-        
+        $data = array(
+          'id_dokumen' => $dokumen_lama,
+          'status' => $status,
+          'upload_dokumen' => $upload_dokumen
+        );
+        $data1 = array(
+          'status' => 'Diubah',
+        );
+        $where = array('id_dokumen' => $dokumen_lama);
+        $this->model_dokumen->update_dokumen($where,$data1,'hkm_dokumen');
+        $this->model_dokumen->tambah_dokumen($data, 'hkm_dokumen_proses');
+        redirect('c_pengelolah_dokumen/index');
       }
       
     
@@ -137,7 +148,9 @@ class C_pengelolah_dokumen extends CI_Controller{
   }
   public function update_data_dokumen()
   {
-    $id       = $this->input->post('id');
+    $id       = $this->session->userdata('id');
+    print_r($id);
+    die();
     $nama_dokumen = $this->input->post('nama_dokumen');
     $jenis_dok = $this->input->post('jenis_dok');
     $pic = $this->input->post('pic');
@@ -192,6 +205,39 @@ class C_pengelolah_dokumen extends CI_Controller{
 	{
 	$this->db->query("DELETE FROM `reminder_dok`.`hkm_dokumen` WHERE `hkm_dokumen`.`id_dokumen` = '$id'"); 
 	redirect('c_pengelolah_dokumen/index');
+  }
+  public function lakukan_download_pemilik($data_dokumen)
+  {
+    $this->load->helper('download');
+    $datadok = $data_dokumen;
+    force_download('uploads/'.$datadok,NULL);
+
+  }
+  public function kirim_email(){
+    $config = [
+      'mailtype' => 'html',
+      'charset' => 'iso-8859-1',
+      'protocol' => 'smtp',
+      'smtp_host' => 'ssl://smtp.googlemail.com',
+      'smtp_user' => 'fajarhansyah6@gmail.com',
+      'smtp_pass' => 'supragtr2019',
+      'smtp_port' => 465
+
+    ];
+    $this->load->library('email',$config);
+    $this->email->initialize($config);
+
+    $this->email->from('fajarhansyah6@gmail.com');
+    $this->email->set_newline("\r\n");
+    $this->email->to('fajarhansyah1@gmail.com');
+    $this->email->subject('Coba tes');
+    $this->email->message('tes aja');
+
+    if($this->email->send()){
+      echo "Berhasil Dikirim";
+    }else{
+      show_error($this->email->print_debugger());
+    }
   }
 
 }

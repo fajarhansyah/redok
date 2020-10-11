@@ -66,7 +66,7 @@ class C_download_dokumen extends CI_Controller{
       $query_download_dokumen = $this->db->query("SELECT *,tb_dokumen.id AS iddkm FROM tb_dokumen 
       LEFT JOIN tb_master_jenis_dok ON tb_dokumen.jenis_dok = tb_master_jenis_dok.id
       LEFT JOIN histori_download_dokumen ON tb_dokumen.id = histori_download_dokumen.id_dokumen
-      WHERE histori_download_dokumen.peminta LIKE '%$username%' && histori_download_dokumen.status != ''");
+      WHERE histori_download_dokumen.peminta LIKE '%$username%' && histori_download_dokumen.status != 'Berhasil'");
       $query_notifikasi = $this->db->query("SELECT *,tb_dokumen.id AS iddkm FROM tb_dokumen 
       LEFT JOIN tb_user ON tb_dokumen.id_user = tb_user.id
       WHERE tb_dokumen.id_user = '$id_pengakses' && pengingat = '1'");

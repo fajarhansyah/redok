@@ -112,68 +112,6 @@
                         </tr>
                         </thead>
                         <tbody>
-                        
-                        <?php
-                            $no=0;
-                            foreach ($data_dokumen as $dd) :
-                            $no++;
-                        ?>
-                            <tr>
-                                <td><?php echo $no ?></td>
-                                <td><?php echo $dd['nama_dokumen'] ?></td>
-                                <td><?php echo $dd['nama_jenis_dokumen'] ?></td>
-                                <td>
-                                  <?php foreach ($user as $usr) : ?>
-                                  <?php  $str = $dd['bag_or_keb'];
-                                              if ($usr->id == $str) {
-                                                echo $usr->username.'<br>';
-                                              }
-                                          
-                                      ?> 
-                                      <?php endforeach; ?></td>
-                                <td><?php echo $dd['pic'] ?></td>
-                                <td>
-                                  <?php 
-                                      echo  $cnvrt_masa_aktif_awal = date('d/m/Y', strtotime($dd['masa_aktif_awal']));
-                                      echo ' - ';
-                                      echo $cnvrt_masa_aktif_awal = date('d/m/Y', strtotime($dd['masa_aktif_akhir']));
-                                  ?>
-                                </td>
-                                
-                                <td>
-                                <?php foreach ($user as $usr) : ?>
-                                  <?php  $str = $dd['akses_for'];
-                                            $str1 = explode(",",$str);
-                                            $jumlahdata = count($str1);
-                                            for ($i=0; $i < $jumlahdata; $i++) { 
-                                              if ($usr->id == $str1[$i]) {
-                                                echo '-'.$usr->username.'<br>';
-                                              }
-                                            }
-                                          
-                                      ?> 
-                                      <?php endforeach; ?>
-                                </td>
-                                <td>
-                                  <?php 
-                                   $id = $this->session->userdata('id');
-                                    if($dd['id_user'] == $id){
-                                  ?>
-                                  <?php echo anchor('c_data_dokumen/edit_data_dokumen/'.$dd['iddkm'], '<button type="button" class="btn btn-primary btn-sm mt-2" title="Edit"><i class="far fa-edit"></i></button>') ?>
-                                  <form action="<?php echo base_url(). 'c_download_dokumen/lakukan_download_pemilik/'.$dd['upload_dokumen'] ?>" method="post">
-                                      <div class="input-group input-group-sm mt-2">
-                                        <span class="input-group-append">
-                                        <button type="submit" class="btn bg-gradient-success btn-sm" title="Download"><i class="fas fa-download"></i></button>
-                                        </span>
-                                      </div>
-                                    </form>
-                                  <?php echo anchor('c_data_dokumen/delete/'.$dd['iddkm'], '<button type="button" class="btn  btn-danger btn-sm mt-2" title="Hapus"><i class="fas fa-trash"></i></button>') ?>
-                                    <?php }else{ ?>
-                                    <button type="button" id="<?php echo $dd['iddkm']?>" onClick="reply_click(this.id)" class="btn  bg-gradient-success btn-sm mt-2" title="Download" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-download"></i></button>
-                                    <?php } ?>
-                                </td>
-                            </tr>
-                            <?php endforeach; ?>
                         </tbody>
                         
                       </table>
